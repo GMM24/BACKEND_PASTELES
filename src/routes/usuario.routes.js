@@ -19,19 +19,37 @@ api.get('/getUsuariosRolCliente', autenticacionToken.Auth, usuarioController.get
 api.get('/getUsuarioRolCliente/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolCliente);
 
 /* ---------------- TAREAS DEL ROL_ADMIN  ---------*/
-/* editar perfil */
-/* ver usuarios con ROL_CLIENTE */
-/* ver usuarios con ROL_FACTURADOR */
-/* ver propio usuario por ID*/
+/* editar perfil put ID*/
+
+/* agregar, ROL_FACTURADOR por defecto post*/
+
+/* agregar, ROL_EMPLEADO por defecto post*/
+
+/* agregar, ROL_GESTOR por defecto post*/
+
+
+/* ver usuarios con ROL_FACTURADOR get */
+
+/* ver usuarios con ROL_EMPLEADO  get*/
+
+/* ver usuarios con ROL_GESTOR get*/
+
+/* ver propio usuario por ID get ID*/
 
 
 
 
 /* ---------------TAREAS DEL ROL_FACTURADOR  ---------- */
-/* agregar, ROL_FACTURADOR por defecto */
 /* editar perfil */
 /* eliminar perfil */
 /* ver a los usuarios que tengan ROL_FACTURADOR */
+/* ver propio usuario por ID */
+
+
+/* ---------------TAREAS DEL ROL_GESTOR ---------- */
+/* editar perfil */
+/* eliminar perfil */
+/* ver a los usuarios que tengan ROL_GESTOR */
 /* ver propio usuario por ID */
 
 /* al momento de subir esto a github, eliminar las librerias :) */

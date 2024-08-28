@@ -150,6 +150,30 @@ function getUsuarioIdRolCliente(req, res){
   })
 }
 
+
+/* TAREAS DEL ROL_ADMIN  
+ if(req.user.rol !== 'ROL_ADMIN'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción "});
+  }
+    */
+/* 1. editar perfil */
+
+/* 2. agregar, ROL_FACTURADOR por defecto */
+
+/* 3. agregar, ROL_EMPLEADO por defecto */
+
+/* 4. agregar, ROL_GESTOR por defecto */
+
+
+/* 5. ver usuarios con ROL_FACTURADOR  funcion 3*/
+
+/* 6.  ver usuarios con ROL_EMPLEADO  */
+
+/* 7. ver usuarios con ROL_GESTOR */
+
+/* 8. ver propio usuario por ID*/
+
+
 /* Siempre mandar a llamar a las funciones aqui */
 module.exports = {
     Login,
