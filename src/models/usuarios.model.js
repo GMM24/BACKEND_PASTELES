@@ -9,9 +9,10 @@ const UsuarioSchema = Schema({
     email: String,
     password: String,
     rol: String,
-    telefono: String,
+    telefono: Number,
     direccion: String,
-
+    departamento: String,
+    municipio: String,
 
     carrito: [{
         nombreProducto: String,

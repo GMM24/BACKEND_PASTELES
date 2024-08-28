@@ -36,8 +36,10 @@ function RegistrarAdministradorDefecto(req, res){
             usuarioModel.email = 'ADMIN';
             usuarioModel.password = '123456'
             usuarioModel.rol = 'ROL_ADMIN';
-            usuarioModel.telefono = '12345678';
+            usuarioModel.telefono = 12345678;
             usuarioModel.direccion = 'Calle Doreteo Guamuch Zona 5';
+            usuarioModel.departamento = 'Guatemala';
+            usuarioModel.municipio = 'Guatemala';
             
   
             Usuarios.find({ email : 'ADMIN'}, (err, usuarioEncontrado) => {

@@ -5,12 +5,6 @@ const jwt = require('../services/jwt');
 
 // USUARIO POR DEFECTO Y VERIFICACION
 // USUARIO POR DEFECTO Y VERIFICACION
-
-
-
-
-
-
 function Login(req, res) {
 
     var parametros = req.body;
@@ -45,9 +39,7 @@ function agregarUsuario(req,res){
 
   var parametros = req.body;
   var usuarioModel = new Usuarios();
-if(parametros.nombre && parametros.email
-  && parametros.password
-){
+if(parametros.nombre && parametros.apellido && parametros.email && parametros.password){
   usuarioModel.nombre = parametros.nombre;
   usuarioModel.apellido = parametros.apellido;
   usuarioModel.email = parametros.email;
@@ -55,6 +47,8 @@ if(parametros.nombre && parametros.email
   usuarioModel.rol = 'ROL_CLIENTE'; 
   usuarioModel.telefono = parametros.telefono;
   usuarioModel.direccion = parametros.direccion;
+  usuarioModel.departamento = parametros.departamento;
+  usuarioModel.municipio = parametros.municipio;
   usuarioModel.totalCarrito = 0;
 
 
@@ -83,15 +77,18 @@ if(parametros.nombre && parametros.email
 }
 }
 
+/* TAREAS DEL ROL_CLIENTE */
 
-function editarUsuario(req, res){
+// 1. editar usuario
+function editarUsuarioRolCliente(req, res){
 
   if(req.user.rol !== 'ROL_CLIENTE'){
-    return res.status(500).send({mensaje:"Unicamente ROL_CLIENTE tiene acceso"});
+    return res.status(500).send({mensaje:"Unicamente el ROL_CLIENTE puede realizar esta acción"});
 
   }
 
   var parametros = req.body;
+  /* este es el id que se pone en la ruta */
   var idCliente = req.params.ID;
   Usuarios.findByIdAndUpdate(idCliente, parametros, {new:true},(err, usuarioEncontrado)=>{
     if (err) return res.status(500).send({mensaje: "Error en la peticion"});
@@ -101,11 +98,66 @@ function editarUsuario(req, res){
   })
 }
 
+// 2. eliminar usuario
+function eliminarUsuarioRolCliente(req, res){
 
+  // siempre poner esto al principio, es para verificar quien puede realizar la acción
+  if(req.user.rol !== 'ROL_CLIENTE'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción "});
+  }
+
+  var idCliente = req.params.ID;
+  Usuarios.findByIdAndDelete(idCliente, (err, eliminarRolUsuario)=>{
+
+    if (err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!eliminarRolUsuario) return res.status(500).send({ mensaje: "Error al eliminar el usuario"});
+    return  res.status(200).send({ usuario: eliminarRolUsuario});
+
+  });
+
+}
+
+// 3. ver a usuarios con ROL_CLIENTE, en este caso es un ejemplo que debera de aplicarse a ROL_ADMIN
+function getUsuariosRolCliente(req, res){
+
+  // VERIFICADOR
+  if(req.user.rol!== 'ROL_CLIENTE'){
+    return res.status(500).send({mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
+
+  }
+
+  // verificar que tipo de usuario quiero ver
+  Usuarios.find({ rol: 'ROL_CLIENTE'}, (err, usuariosEncontrados)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+    return res.status(200).send({ usuario: usuariosEncontrados});
+  })
+}
+
+/* 4. ver a un perfil que tenga ROL_CLIENTE por el ID*/
+function getUsuarioIdRolCliente(req, res){
+  if(req.user.rol!== 'ROL_CLIENTE'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
+  }
+
+  // buscar por id
+  var idCliente = req.params.ID;
+
+  Usuarios.findById(idCliente, (err, usuariosEncontrados)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+    return res.status(200).send({ usuario: usuariosEncontrados})
+  })
+}
+
+/* Siempre mandar a llamar a las funciones aqui */
 module.exports = {
     Login,
     agregarUsuario,
-    editarUsuario
+    editarUsuarioRolCliente,
+    eliminarUsuarioRolCliente,
+    getUsuariosRolCliente,
+    getUsuarioIdRolCliente
 }
 
 
