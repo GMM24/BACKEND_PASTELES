@@ -66,11 +66,60 @@ function editarCategoria(req, res){
     })
 }
 
+function eliminarCategoriaRolGestor(req, res){
+    if(req.user.rol !== 'ROL_GESTOR'){
+      return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
+    }
+  
+    var idGestor = req.params.ID;
+    Categorias.findByIdAndDelete(idGestor, (err, eliminarCategoria)=>{
+  
+      if (err) return res.status(500).send({ mensaje: "Error en la petición"});
+      if(!eliminarCategoria) return res.status(500).send({ mensaje: "Error al eliminar la categoria"});
+      return  res.status(200).send({ categoria: eliminarCategoria});
+  
+    })
+  }
+
+
+/*Ver categorias*/
+function getCategoriaRolGestor(req, res){
+
+    if(req.user.rol!== 'ROL_GESTOR'){
+      return res.status(500).send({mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
+  
+    }
+ 
+    Usuarios.find({ rol: 'ROL_GESTOR'}, (err, usuariosEncontrados)=>{
+      if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+      if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+      return res.status(200).send({ usuario: usuariosEncontrados});
+    })
+  }
+
+  /*Ver categoria por ID */
+  function getCategoriaIDRolGestor(req, res){
+    if(req.user.rol!== 'ROL_CLIENTE'){
+      return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
+    }
+  
+    // buscar por id
+    var idCliente = req.params.ID;
+  
+    Usuarios.findById(idCliente, (err, usuariosEncontrados)=>{
+      if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+      if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+      return res.status(200).send({ usuario: usuariosEncontrados})
+    })
+  }
 /* agregar,  editar eliminar  ROL_ADMIN, leer, leer por id, */
 
 
 module.exports = {
 AgregarCategoria,
 editarCategoria,
-ObtenerCategorias
+ObtenerCategorias,
+getCategoriaRolGestor,
+eliminarCategoriaRolGestor,
+
 }
