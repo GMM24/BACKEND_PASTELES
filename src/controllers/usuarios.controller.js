@@ -2,6 +2,7 @@
 const Usuarios = require('../models/usuarios.model');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('../services/jwt');
+const { PartialTextBasedChannel } = require('discord.js');
 
 // USUARIO POR DEFECTO Y VERIFICACION
 // USUARIO POR DEFECTO Y VERIFICACION
@@ -151,37 +152,258 @@ function getUsuarioIdRolCliente(req, res){
 }
 
 
-/* TAREAS DEL ROL_ADMIN  
- if(req.user.rol !== 'ROL_ADMIN'){
-    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción "});
-  }
-    */
+/* TAREAS DEL ROL_ADMIN */
 /* 1. editar perfil */
-
+  function editarUsuarioRolAdmin(req,res){
+    if(req.user.rol !== 'ROL_ADMIN'){
+      return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
+  
+    }
+  
+    var parametros = req.body;
+    var idAdmin = req.params.ID;
+    Usuarios.findByIdAndUpdate(idAdmin, parametros, {new:true},(err, adminEncontrado)=>{
+      if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+      if (!adminEncontrado)return res.status(500).send({mensaje : "Error al editar el Administrador"});
+      return res.status(200).send({usuario:adminEncontrado});
+  
+    })
+  }
 /* 2. agregar, ROL_FACTURADOR por defecto */
+function agregarFacturador(req,res){
+
+  var parametros = req.body;
+  var usuarioModel = new Usuarios();
+if(parametros.nombre && parametros.apellido && parametros.email && parametros.password){
+  usuarioModel.nombre = parametros.nombre;
+  usuarioModel.apellido = parametros.apellido;
+  usuarioModel.email = parametros.email;
+  usuarioModel.password = parametros.password;
+  usuarioModel.rol = 'ROL_FACTURADOR'; 
+  usuarioModel.telefono = parametros.telefono;
+  usuarioModel.direccion = parametros.direccion;
+  usuarioModel.departamento = parametros.departamento;
+  usuarioModel.municipio = parametros.municipio;
+  usuarioModel.totalCarrito = 0;
+
+  Usuarios.find({email:parametros.email}, (err, facturadorGuardado) => {
+    if (facturadorGuardado.length == 0) {
+      bcrypt.hash(parametros.password,null,null, (err, passwordEncriptada) =>{
+        usuarioModel.password = passwordEncriptada;
+
+
+
+        usuarioModel.save((err, facturadorGuardado)=> {
+          if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+          if (!facturadorGuardado)return res.status(500).send({mensaje : "Error al agregar el facturador"});
+
+          return res.status(200).send({usuario:facturadorGuardado});
+        });
+      });
+    } else {
+      return res.status(500).send({mensaje:"Correo Existente, ingrese uno nuevo"});
+    }
+
+})
+}else{
+return res.status(500).send({mensaje:"Complete los campos obligatorios"});
+}}
 
 /* 3. agregar, ROL_EMPLEADO por defecto */
+function agregarEmpleado(req,res){
 
+  var parametros = req.body;
+  var usuarioModel = new Usuarios();
+if(parametros.nombre && parametros.apellido && parametros.email && parametros.password){
+  usuarioModel.nombre = parametros.nombre;
+  usuarioModel.apellido = parametros.apellido;
+  usuarioModel.email = parametros.email;
+  usuarioModel.password = parametros.password;
+  usuarioModel.rol = 'ROL_EMPLEADO'; 
+  usuarioModel.telefono = parametros.telefono;
+  usuarioModel.direccion = parametros.direccion;
+  usuarioModel.departamento = parametros.departamento;
+  usuarioModel.municipio = parametros.municipio;
+
+  Usuarios.find({email:parametros.email}, (err, empleadoGuardado) => {
+    if (empleadoGuardado.length == 0) {
+      bcrypt.hash(parametros.password,null,null, (err, passwordEncriptada) =>{
+        usuarioModel.password = passwordEncriptada;
+
+
+
+        usuarioModel.save((err, empleadoGuardado)=> {
+          if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+          if (!empleadoGuardado)return res.status(500).send({mensaje : "Error al agregar el empleado"});
+
+          return res.status(200).send({usuario:empleadoGuardado});
+        });
+      });
+    } else {
+      return res.status(500).send({mensaje:"Correo Existente, ingrese uno nuevo"});
+    }
+
+})
+}else{
+return res.status(500).send({mensaje:"Complete los campos obligatorios"});
+}}
 /* 4. agregar, ROL_GESTOR por defecto */
+function agregarGestor(req,res){
 
+  var parametros = req.body;
+  var usuarioModel = new Usuarios();
+if(parametros.nombre && parametros.apellido && parametros.email && parametros.password){
+  usuarioModel.nombre = parametros.nombre;
+  usuarioModel.apellido = parametros.apellido;
+  usuarioModel.email = parametros.email;
+  usuarioModel.password = parametros.password;
+  usuarioModel.rol = 'ROL_GESTOR'; 
+  usuarioModel.telefono = parametros.telefono;
+  usuarioModel.direccion = parametros.direccion;
+  usuarioModel.departamento = parametros.departamento;
+  usuarioModel.municipio = parametros.municipio;
+
+  Usuarios.find({email:parametros.email}, (err, gestorGuardado) => {
+    if (gestorGuardado.length == 0) {
+      bcrypt.hash(parametros.password,null,null, (err, passwordEncriptada) =>{
+        usuarioModel.password = passwordEncriptada;
+
+
+
+        usuarioModel.save((err, gestorGuardado)=> {
+          if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+          if (!gestorGuardado)return res.status(500).send({mensaje : "Error al agregar el empleado"});
+
+          return res.status(200).send({usuario:gestorGuardado});
+        });
+      });
+    } else {
+      return res.status(500).send({mensaje:"Correo Existente, ingrese uno nuevo"});
+    }
+
+})
+}else{
+return res.status(500).send({mensaje:"Complete los campos obligatorios"});
+}}
 
 /* 5. ver usuarios con ROL_FACTURADOR  funcion 3*/
+function getUsuariosRolFacturador(req, res){
+
+  if(req.user.rol!== 'ROL_FACTURADOR'){
+    return res.status(500).send({mensaje: "Unicamente el ROL_FACTURADOR puede realizar esta acción"});
+
+  }
+
+  // verificar que tipo de usuario quiero ver
+  Usuarios.find({ rol: 'ROL_FACTURADOR'}, (err, facturadorEncontrado)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!facturadorEncontrado) return res.status(500).send({ mensaje: "Error al ver los facturadores"});
+    return res.status(200).send({ usuario: facturadorEncontrado});
+  })
+}
 
 /* 6.  ver usuarios con ROL_EMPLEADO  */
+function getUsuariosRolEmpleado(req, res){
 
+  if(req.user.rol!== 'ROL_EMPLEADO'){
+    return res.status(500).send({mensaje: "Unicamente el ROL_EMPLEADO puede realizar esta acción"});
+
+  }
+
+  // verificar que tipo de usuario quiero ver
+  Usuarios.find({ rol: 'ROL_EMPLEADO'}, (err, empleadoEncontrado)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!empleadoEncontrado) return res.status(500).send({ mensaje: "Error al ver los empleados"});
+    return res.status(200).send({ usuario: empleadoEncontrado});
+  })
+}
 /* 7. ver usuarios con ROL_GESTOR */
+function getUsuariosRolGestor(req, res){
+
+  // VERIFICADOR
+  if(req.user.rol!== 'ROL_GESTOR'){
+    return res.status(500).send({mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
+
+  }
+
+  // verificar que tipo de usuario quiero ver
+  Usuarios.find({ rol: 'ROL_GESTOR'}, (err, gestorEncontrado)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!gestorEncontrado) return res.status(500).send({ mensaje: "Error al ver los gestores de inventario"});
+    return res.status(200).send({ usuario: gestorEncontrado});
+  })
+}
 
 /* 8. ver propio usuario por ID*/
+function getUsuarioIdRolAdministrador(req, res){
+  if(req.user.rol == 'ROL_ADMIN'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción"});
+  }
 
+  // buscar por id
+  var idAdministrador = req.params.ID;
+
+  Usuarios.findById(idAdministrador, (err, administradorEncontrado)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!administradorEncontrado) return res.status(500).send({ mensaje: "Error al ver los administradores"});
+    return res.status(200).send({ usuario: administradorEncontrado})
+  })
+}
+/*TAREAS DE ROL GESTOR*/
+function editarUsuarioRolGestor(req,res){
+  if(req.user.rol !== 'ROL_GESTOR'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
+
+  }
+
+  var parametros = req.body;
+  var idGestor = req.params.ID;
+  Usuarios.findByIdAndUpdate(idGestor, parametros, {new:true},(err, gestoresEncontrados)=>{
+    if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+    if (!gestoresEncontrados)return res.status(500).send({mensaje : "Error al editar el gestor"});
+    return res.status(200).send({usuario:gestoresEncontrados});
+
+  })
+}
+/*eliminar perfil de gestor*/
+function eliminarUsuarioRolGestor(req, res){
+
+  if(req.user.rol !== 'ROL_GESTOR'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
+  }
+
+  var idGestor = req.params.ID;
+  Usuarios.findByIdAndDelete(idGestor, (err, eliminarRolGestor)=>{
+
+    if (err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!editarUsuarioRolGestor) return res.status(500).send({ mensaje: "Error al eliminar el gestor"});
+    return  res.status(200).send({ usuario: eliminarRolGestor});
+
+  });
+
+}
 
 /* Siempre mandar a llamar a las funciones aqui */
 module.exports = {
     Login,
     agregarUsuario,
+    /*MODULOS CLIENTE*/
     editarUsuarioRolCliente,
     eliminarUsuarioRolCliente,
     getUsuariosRolCliente,
-    getUsuarioIdRolCliente
+    getUsuarioIdRolCliente,
+    /*MODULOS ADMINISTRADOR*/ 
+    editarUsuarioRolAdmin,
+    agregarFacturador,
+    agregarEmpleado,
+    agregarGestor,
+    getUsuariosRolFacturador,
+    getUsuariosRolEmpleado,
+    getUsuariosRolGestor,
+    getUsuarioIdRolAdministrador,
+    /*MODULO GESTOR*/
+    editarUsuarioRolGestor,
+    eliminarUsuarioRolGestor
 }
 
 

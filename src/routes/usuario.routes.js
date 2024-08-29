@@ -20,22 +20,21 @@ api.get('/getUsuarioRolCliente/:ID', autenticacionToken.Auth, usuarioController.
 
 /* ---------------- TAREAS DEL ROL_ADMIN  ---------*/
 /* editar perfil put ID*/
-
+api.put ('/editarRolAdmin/:ID' , autenticacionToken.Auth, usuarioController.editarUsuarioRolAdmin);
 /* agregar, ROL_FACTURADOR por defecto post*/
-
+api.post ('/agregarRolFacturador', usuarioController.agregarFacturador);
 /* agregar, ROL_EMPLEADO por defecto post*/
-
+api.post ('/agregarRolEmpleado', usuarioController.agregarEmpleado);
 /* agregar, ROL_GESTOR por defecto post*/
-
-
+api.post ('/agregarRolGestor', usuarioController.agregarGestor);
 /* ver usuarios con ROL_FACTURADOR get */
-
+api.get ('/getUsuariosRolFacturador', autenticacionToken.Auth, usuarioController.getUsuariosRolFacturador);
 /* ver usuarios con ROL_EMPLEADO  get*/
-
+api.get ('/getUsuarioRolEmpleado', autenticacionToken.Auth, usuarioController.getUsuariosRolEmpleado);
 /* ver usuarios con ROL_GESTOR get*/
-
+api.get ('/getUsuarioRolGestor', autenticacionToken.Auth, usuarioController.getUsuariosRolGestor);
 /* ver propio usuario por ID get ID*/
-
+api.get ('/getUsuarioAdministrador/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolAdministrador);
 
 
 
@@ -48,9 +47,13 @@ api.get('/getUsuarioRolCliente/:ID', autenticacionToken.Auth, usuarioController.
 
 /* ---------------TAREAS DEL ROL_GESTOR ---------- */
 /* editar perfil */
+api.put ('/editarRolGestor/:ID', autenticacionToken.Auth,  usuarioController.editarUsuarioRolGestor);
 /* eliminar perfil */
+api.delete ('/eliminarRolGestor/:ID', autenticacionToken.Auth, usuarioController.eliminarUsuarioRolGestor);
 /* ver a los usuarios que tengan ROL_GESTOR */
+
 /* ver propio usuario por ID */
+
 
 /* al momento de subir esto a github, eliminar las librerias :) */
 module.exports= api;
