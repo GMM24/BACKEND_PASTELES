@@ -1,4 +1,4 @@
-// MODELO AXEL JAVIER GUADALUPE ALVAREZ FELIPE
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
