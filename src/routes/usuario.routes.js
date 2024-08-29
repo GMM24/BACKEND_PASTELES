@@ -21,12 +21,13 @@ api.get('/getUsuarioRolCliente/:ID', autenticacionToken.Auth, usuarioController.
 /* ---------------- TAREAS DEL ROL_ADMIN  ---------*/
 /* editar perfil put ID*/
 api.put ('/editarRolAdmin/:ID' , autenticacionToken.Auth, usuarioController.editarUsuarioRolAdmin);
+
 /* agregar, ROL_FACTURADOR por defecto post*/
-api.post ('/agregarRolFacturador', usuarioController.agregarFacturador);
+api.post ('/agregarRolFacturador', autenticacionToken.Auth,  usuarioController.agregarFacturador);
 /* agregar, ROL_EMPLEADO por defecto post*/
-api.post ('/agregarRolEmpleado', usuarioController.agregarEmpleado);
+api.post ('/agregarRolEmpleado',  autenticacionToken.Auth, usuarioController.agregarEmpleado);
 /* agregar, ROL_GESTOR por defecto post*/
-api.post ('/agregarRolGestor', usuarioController.agregarGestor);
+api.post ('/agregarRolGestor',  autenticacionToken.Auth, usuarioController.agregarGestor);
 /* ver usuarios con ROL_FACTURADOR get */
 api.get ('/getUsuariosRolFacturador', autenticacionToken.Auth, usuarioController.getUsuariosRolFacturador);
 /* ver usuarios con ROL_EMPLEADO  get*/

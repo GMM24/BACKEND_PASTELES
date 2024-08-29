@@ -2,7 +2,7 @@
 const Usuarios = require('../models/usuarios.model');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('../services/jwt');
-const { PartialTextBasedChannel } = require('discord.js');
+
 
 // USUARIO POR DEFECTO Y VERIFICACION
 // USUARIO POR DEFECTO Y VERIFICACION
@@ -172,6 +172,11 @@ function getUsuarioIdRolCliente(req, res){
 /* 2. agregar, ROL_FACTURADOR por defecto */
 function agregarFacturador(req,res){
 
+  if(req.user.rol !== 'ROL_ADMIN'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
+
+  }
+
   var parametros = req.body;
   var usuarioModel = new Usuarios();
 if(parametros.nombre && parametros.apellido && parametros.email && parametros.password){
@@ -212,6 +217,11 @@ return res.status(500).send({mensaje:"Complete los campos obligatorios"});
 /* 3. agregar, ROL_EMPLEADO por defecto */
 function agregarEmpleado(req,res){
 
+  if(req.user.rol !== 'ROL_ADMIN'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
+
+  }
+
   var parametros = req.body;
   var usuarioModel = new Usuarios();
 if(parametros.nombre && parametros.apellido && parametros.email && parametros.password){
@@ -249,6 +259,11 @@ return res.status(500).send({mensaje:"Complete los campos obligatorios"});
 }}
 /* 4. agregar, ROL_GESTOR por defecto */
 function agregarGestor(req,res){
+
+  if(req.user.rol !== 'ROL_ADMIN'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
+
+  }
 
   var parametros = req.body;
   var usuarioModel = new Usuarios();
@@ -289,9 +304,9 @@ return res.status(500).send({mensaje:"Complete los campos obligatorios"});
 /* 5. ver usuarios con ROL_FACTURADOR  funcion 3*/
 function getUsuariosRolFacturador(req, res){
 
-  if(req.user.rol!== 'ROL_FACTURADOR'){
-    return res.status(500).send({mensaje: "Unicamente el ROL_FACTURADOR puede realizar esta acción"});
-
+  if(req.user.rol !== 'ROL_ADMIN'){
+      return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
+  
   }
 
   // verificar que tipo de usuario quiero ver
@@ -304,9 +319,8 @@ function getUsuariosRolFacturador(req, res){
 
 /* 6.  ver usuarios con ROL_EMPLEADO  */
 function getUsuariosRolEmpleado(req, res){
-
-  if(req.user.rol!== 'ROL_EMPLEADO'){
-    return res.status(500).send({mensaje: "Unicamente el ROL_EMPLEADO puede realizar esta acción"});
+  if(req.user.rol !== 'ROL_ADMIN'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
 
   }
 
@@ -321,8 +335,8 @@ function getUsuariosRolEmpleado(req, res){
 function getUsuariosRolGestor(req, res){
 
   // VERIFICADOR
-  if(req.user.rol!== 'ROL_GESTOR'){
-    return res.status(500).send({mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
+  if(req.user.rol !== 'ROL_ADMIN'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
 
   }
 
@@ -369,8 +383,8 @@ function editarUsuarioRolFacturador(req, res){
 function eliminarUsuarioRolFacturador(req, res){
 
   // siempre poner esto al principio, es para verificar quien puede realizar la acción
-  if(req.user.rol !== 'ROL_Facturador'){
-    return res.status(500).send({ mensaje: "Unicamente el ROL_Facturador puede realizar esta acción "});
+  if(req.user.rol !== 'ROL_FACTURADOR'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_FACTURADOR puede realizar esta acción"});
   }
 
   var idFacturador = req.params.ID;
