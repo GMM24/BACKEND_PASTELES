@@ -51,9 +51,9 @@ api.put ('/editarRolGestor/:ID', autenticacionToken.Auth,  usuarioController.edi
 /* eliminar perfil */
 api.delete ('/eliminarRolGestor/:ID', autenticacionToken.Auth, usuarioController.eliminarUsuarioRolGestor);
 /* ver a los usuarios que tengan ROL_GESTOR */
-
+api.get('/getUsuariosRolFacturador', autenticacionToken.Auth, usuarioController.getUsuariosRoLGestor);
 /* ver propio usuario por ID */
-
+api.get('/getUsuarioRolFacturador/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolGestor);
 
 /* al momento de subir esto a github, eliminar las librerias :) */
 module.exports= api;

@@ -349,6 +349,77 @@ function getUsuarioIdRolAdministrador(req, res){
     return res.status(200).send({ usuario: administradorEncontrado})
   })
 }
+/* Funciones del ROL_FACTURADOR */
+/* Editar usuario */
+function editarUsuarioRolFacturador(req, res){
+  if(req.user.rol !== 'ROL_FACTURADOR'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_FACTURADOR puede realizar esta acción"});
+  }
+  var parametros = req.body;
+  /* este es el id que se pone en la ruta */
+  var idFacturador = req.params.ID;
+  Usuarios.findByIdAndUpdate(idFacturador, parametros, {new:true},(err, usuarioEncontrado)=>{
+    if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+    if (!usuarioEncontrado)return res.status(500).send({mensaje : "Error al editar  el cliente"});
+    return res.status(200).send({usuario:usuarioEncontrado});
+  })
+}
+
+/* Eliminar usuario*/
+function eliminarUsuarioRolFacturador(req, res){
+
+  // siempre poner esto al principio, es para verificar quien puede realizar la acción
+  if(req.user.rol !== 'ROL_Facturador'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_Facturador puede realizar esta acción "});
+  }
+
+  var idFacturador = req.params.ID;
+  Usuarios.findByIdAndDelete(idFacturador, (err, eliminarRolUsuario)=>{
+
+    if (err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!eliminarRolUsuario) return res.status(500).send({ mensaje: "Error al eliminar el usuario"});
+    return  res.status(200).send({ usuario: eliminarRolUsuario});
+  });
+
+}
+
+/* Ver usuarios con el ROL_FACTURADOR */
+function getUsuariosRolFacturador(req, res){
+
+  // VERIFICADOR
+  if(req.user.rol!== 'ROL_FACTURADOR'){
+    return res.status(500).send({mensaje: "Unicamente el ROL_FACTURADOR puede realizar esta acción"});
+
+  }
+
+  // verificar que tipo de usuario quiero ver
+  Usuarios.find({ rol: 'ROL_FACTURADOR'}, (err, usuariosEncontrados)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+    return res.status(200).send({ usuario: usuariosEncontrados});
+  })
+}
+
+/* Ver usuario propio del ROL_FACTURADOR*/
+function getUsuarioIdRolFacturador(req, res){
+  if(req.user.rol!== 'ROL_FACTURADOR'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_FACTURADOR puede realizar esta acción"});
+  }
+  // buscar por id
+  var idFacturador = req.params.ID;
+
+  Usuarios.findById(idFacturador, (err, usuariosEncontrados)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+    return res.status(200).send({ usuario: usuariosEncontrados})
+  })
+}
+
+// 1. editar usuario
+// 2 eliminar usuario
+// 3 ver usuarios
+// 4 ver propio usuario
+
 /*TAREAS DE ROL GESTOR*/
 function editarUsuarioRolGestor(req,res){
   if(req.user.rol !== 'ROL_GESTOR'){
@@ -382,6 +453,37 @@ function eliminarUsuarioRolGestor(req, res){
   });
 
 }
+/* Ver usuarios con el ROL_GESTOR */
+function getUsuariosRoLGestor(req, res){
+
+  // VERIFICADOR
+  if(req.user.rol!== 'ROL_GESTOR'){
+    return res.status(500).send({mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
+
+  }
+
+  // verificar que tipo de usuario quiero ver
+  Usuarios.find({ rol: 'ROL_GESTOR'}, (err, usuariosEncontrados)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+    return res.status(200).send({ usuario: usuariosEncontrados});
+  })
+}
+
+/* Ver usuario propio del ROL_GESTOR*/
+function getUsuarioIdRolGestor(req, res){
+  if(req.user.rol!== 'ROL_GESTOR'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
+  }
+  // buscar por id
+  var idFacturador = req.params.ID;
+
+  Usuarios.findById(idFacturador, (err, usuariosEncontrados)=>{
+    if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+    if(!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios"});
+    return res.status(200).send({ usuario: usuariosEncontrados})
+  })
+}
 
 /* Siempre mandar a llamar a las funciones aqui */
 module.exports = {
@@ -401,9 +503,16 @@ module.exports = {
     getUsuariosRolEmpleado,
     getUsuariosRolGestor,
     getUsuarioIdRolAdministrador,
+    /*MODULOS FACTURADOR*/
+    editarUsuarioRolFacturador,
+    eliminarUsuarioRolFacturador,
+    getUsuariosRolFacturador,
+    getUsuarioIdRolFacturador,
     /*MODULO GESTOR*/
     editarUsuarioRolGestor,
-    eliminarUsuarioRolGestor
+    eliminarUsuarioRolGestor,
+    getUsuariosRoLGestor,
+    getUsuarioIdRolGestor
 }
 
 
