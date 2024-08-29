@@ -5,11 +5,11 @@ const Categorias = require('../models/categorias.model');
 /* agregar,  editar, eliminar  ROL_GESTOR, leer, leer por id, */
 
 /*Agregar Categoria*/
-if(req.user.rol !== 'ROL_GESTOR'){
-    return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
-
-}
 function agregarCategoria(req, res){
+    if(req.user.rol !== 'ROL_GESTOR'){
+        return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
+    
+    }
     var parametros = req.body;
     var categoriaModel = new Categorias();
 if(parametros.nombre && parametros.descripcion){
