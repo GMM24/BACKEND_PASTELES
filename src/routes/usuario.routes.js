@@ -37,13 +37,15 @@ api.get ('/getUsuarioRolGestor', autenticacionToken.Auth, usuarioController.getU
 api.get ('/getUsuarioAdministrador/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolAdministrador);
 
 
-
-/* ---------------TAREAS DEL ROL_FACTURADOR  ---------- */
-/* editar perfil */
-/* eliminar perfil */
-/* ver a los usuarios que tengan ROL_FACTURADOR */
-/* ver propio usuario por ID */
-
+/* ---------- TAREAS DEL ROL_FACTURADOR ------------- */
+/* Editar usuario, el ID es el que se puso en el codigo */
+api.put ('/editarRolFacturador/:ID', autenticacionToken.Auth, usuarioController.editarUsuarioRolFacturador);
+/* Eliminar usuario por medio del id*/
+api.delete("/eliminarRolFacturador/:ID", autenticacionToken.Auth, usuarioController.eliminarUsuarioRolFacturador);
+/* Ver usuarios que tengan ROL_CLIENTE*/
+api.get('/getUsuariosRolFacturador', autenticacionToken.Auth, usuarioController.getUsuariosRolFacturador);
+/* Ver propio usuario por ID ROL_CLIENTE, ver perfil en conclusión */
+api.get('/getUsuarioRolFacturador/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolFacturador);
 
 /* ---------------TAREAS DEL ROL_GESTOR ---------- */
 /* editar perfil */
