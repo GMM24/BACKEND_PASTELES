@@ -5,26 +5,58 @@ const Categorias = require('../models/categorias.model');
 /* agregar,  editar, eliminar  ROL_GESTOR, leer, leer por id, */
 
 /*Agregar Categoria*/
-function agregarCategoria(req, res){
-    if(req.user.rol !== 'ROL_GESTOR'){
+function AgregarCategoria(req, res){
+
+    if(req.user.rol !== 'ROL_CLIENTE'){
         return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
     
     }
+
     var parametros = req.body;
     var categoriaModel = new Categorias();
-if(parametros.nombre && parametros.descripcion){
-    categoriaModel.nombre = parametros.nombre;
-    categoriaModel.descripcion = parametros.descripcion;
-    categoriaModel.rol = 'ROL_GESTOR';
+
+    if(parametros.nombre&&parametros.descripcion){
+        categoriaModel.nombre = parametros.nombre;
+        categoriaModel.descripcion = parametros.descripcion;
+        categoriaModel.idAdministrador = req.user.sub;
+
+        categoriaModel.save((err, categoriaAlmacenada)=>{
+            if(err) return res.status(500).send({ mensaje: "Error en la peticion" });
+            if(!categoriaAlmacenada) return res.status(404).send( { mensaje: "Error, no se agrego ningun producto"});
+            return res.status(200).send({ categoria: categoriaAlmacenada});
+        })
+    }
 }
+
+
+function ObtenerCategorias (req, res) {
+
+    if(req.user.rol !== 'ROL_CLIENTE'){
+        return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
+    
+    }
+
+    Categorias.find((err, CategoriasGuardadas) => {
+        if (err) return res.send({ mensaje: "Error: " + err })
+
+        return res.send({ categorias: CategoriasGuardadas })
+        /* Esto retornara
+            {
+                productos: ["array con todos los productos"]
+            }
+        */ 
+    })
 }
 
 /*Editar Categoria*/
 function editarCategoria(req, res){
-    if(req.user.rol !== 'ROL_GESTOR'){
+    
+    if(req.user.rol !== 'ROL_CLIENTE'){
         return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
     
     }
+
+    
     var parametros = req.body;
     var idGestor = req.params.ID;
     Categorias.findByIdAndUpdate(idGestor, parametros, {new:true}, (err, categoriaEncontrada)=>{
@@ -38,6 +70,7 @@ function editarCategoria(req, res){
 
 
 module.exports = {
-agregarCategoria,
+AgregarCategoria,
 editarCategoria,
+ObtenerCategorias
 }
