@@ -7,10 +7,9 @@ const Categorias = require('../models/categorias.model');
 /*Agregar Categoria*/
 function AgregarCategoria(req, res){
 
-    if(req.user.rol !== 'ROL_CLIENTE'){
-        return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
-    
-    }
+  if(req.user.rol !== 'ROL_GESTOR'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
+  }
 
     var parametros = req.body;
     var categoriaModel = new Categorias();
@@ -31,10 +30,9 @@ function AgregarCategoria(req, res){
 
 function ObtenerCategorias (req, res) {
 
-    if(req.user.rol !== 'ROL_CLIENTE'){
-        return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
-    
-    }
+  if(req.user.rol !== 'ROL_GESTOR'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
+  }
 
     Categorias.find((err, CategoriasGuardadas) => {
         if (err) return res.send({ mensaje: "Error: " + err })
@@ -51,10 +49,9 @@ function ObtenerCategorias (req, res) {
 /*Editar Categoria*/
 function editarCategoria(req, res){
     
-    if(req.user.rol !== 'ROL_CLIENTE'){
-        return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
-    
-    }
+  if(req.user.rol !== 'ROL_GESTOR'){
+    return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
+  }
 
     
     var parametros = req.body;
@@ -99,8 +96,10 @@ function getCategoriaRolGestor(req, res){
 
   /*Ver categoria por ID */
   function getCategoriaIDRolGestor(req, res){
-    if(req.user.rol!== 'ROL_CLIENTE'){
-      return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
+   
+    if(req.user.rol!== 'ROL_GESTOR'){
+      return res.status(500).send({mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
+  
     }
   
     // buscar por id
@@ -121,5 +120,6 @@ editarCategoria,
 ObtenerCategorias,
 getCategoriaRolGestor,
 eliminarCategoriaRolGestor,
+getCategoriaIDRolGestor
 
 }
