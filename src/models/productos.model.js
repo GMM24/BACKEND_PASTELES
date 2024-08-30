@@ -8,6 +8,8 @@ var ProductosSchema = Schema({
     cantidad: Number,
     vendido: Number,
     precio: Number,
+    preciocompra: Number,
+    
 
     idCategoria: {type: Schema.Types.ObjectId, ref: 'Categorias'}
 });
