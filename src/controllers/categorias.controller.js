@@ -96,24 +96,6 @@ function getCategoriaIdRolGestor(req, res){
 }
 
 
-  /*Ver categoria por ID 
-  function getCategoriaIDRolGestor(req, res){
-   
-    if(req.user.rol!== 'ROL_GESTOR'){
-      return res.status(500).send({mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
-  
-    }
-  
-    // buscar por id
-    var idGestor = req.params.ID;
-  
-    Usuarios.findById(idGestor, (err, categoriaEncontrada)=>{
-      if(err) return res.status(500).send({ mensaje: "Error en la petición"});
-      if(!categoriaEncontrada) return res.status(500).send({ mensaje: "Error al ver las categorias"});
-      return res.status(200).send({ usuario: categoriaEncontrada})
-    })
-  }*/
-
   /*TAREA DE ROL ADMIN */
 
 /* agregar,  editar eliminar  ROL_ADMIN, leer, leer por id, */
@@ -205,7 +187,6 @@ editarCategoria,
 ObtenerCategorias,
 eliminarCategoriaRolGestor,
 getCategoriaIdRolGestor,
-/*getCategoriaIDRolGestor,*/
 AgregarCategoriaRolAdmin,
 editarCategoriaRolAdmin,
 eliminarCategoriaRolAdmin,

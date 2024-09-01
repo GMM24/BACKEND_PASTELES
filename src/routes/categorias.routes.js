@@ -15,7 +15,7 @@ api.post ('/agregarCategoriaAdmin', autenticacionToken.Auth, CategoriasControlle
 api.put ('/editarCategoriaAdmin/:ID', autenticacionToken.Auth, CategoriasController.editarCategoriaRolAdmin);
 api.delete ('/eliminarCategoriaAdmin/:ID', autenticacionToken.Auth, CategoriasController.eliminarCategoriaRolAdmin);
 api.get ('/getCategoriaAdmin', autenticacionToken.Auth , CategoriasController.getCategoriaRolAdmin);
-api.get ('/getCategoriasRolAdmin', autenticacionToken.Auth, CategoriasController.getCategoriaIDRolAdmin);
+api.get ('/getCategoriasIDRolAdmin/:ID', autenticacionToken.Auth, CategoriasController.getCategoriaIDRolAdmin);
 
 
 /* al momento de subir esto a github, eliminar las librerias :) */
