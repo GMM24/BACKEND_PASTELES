@@ -9,8 +9,13 @@ api.post('/agregarCategoria', autenticacionToken.Auth, CategoriasController.Agre
 api.put ('/editarCategoria/:ID', autenticacionToken.Auth, CategoriasController.editarCategoria);
 api.delete ('/eliminarCategoria/:ID', autenticacionToken.Auth, CategoriasController.eliminarCategoriaRolGestor);
 api.get('/getCategorias', autenticacionToken.Auth, CategoriasController.ObtenerCategorias);
-api.get ('/getCategoriaRolGestor', autenticacionToken.Auth, CategoriasController.getCategoriaRolGestor);
+api.get ('/getCategoriaRolGestorID/:ID' , autenticacionToken.Auth , CategoriasController.getCategoriaIdRolGestor)
 
+api.post ('/agregarCategoriaAdmin', autenticacionToken.Auth, CategoriasController.AgregarCategoriaRolAdmin);
+api.put ('/editarCategoriaAdmin/:ID', autenticacionToken.Auth, CategoriasController.editarCategoriaRolAdmin);
+api.delete ('/eliminarCategoriaAdmin/:ID', autenticacionToken.Auth, CategoriasController.eliminarCategoriaRolAdmin);
+api.get ('/getCategoriaAdmin', autenticacionToken.Auth , CategoriasController.getCategoriaRolAdmin);
+api.get ('/getCategoriasRolAdmin', autenticacionToken.Auth, CategoriasController.getCategoriaIDRolAdmin);
 
 
 /* al momento de subir esto a github, eliminar las librerias :) */

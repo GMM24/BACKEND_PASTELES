@@ -191,29 +191,30 @@ if(parametros.nombre && parametros.apellido && parametros.email && parametros.pa
   usuarioModel.municipio = parametros.municipio;
   usuarioModel.totalCarrito = 0;
 
-  Usuarios.find({email:parametros.email}, (err, facturadorGuardado) => {
-    if (facturadorGuardado.length == 0) {
-      bcrypt.hash(parametros.password,null,null, (err, passwordEncriptada) =>{
-        usuarioModel.password = passwordEncriptada;
+ //Verificacion de email
+  Usuarios.find({email:parametros.email}, (err, usuarioEncontrado) => {
+      if (usuarioEncontrado.length == 0) {
+        bcrypt.hash(parametros.password,null,null, (err, passwordEncriptada) =>{
+          usuarioModel.password = passwordEncriptada;
 
 
 
-        usuarioModel.save((err, facturadorGuardado)=> {
-          if (err) return res.status(500).send({mensaje: "Error en la peticion"});
-          if (!facturadorGuardado)return res.status(500).send({mensaje : "Error al agregar el facturador"});
+          usuarioModel.save((err, usuarioGuardado)=> {
+            if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+            if (!usuarioGuardado)return res.status(500).send({mensaje : "Error al agregar el cliente"});
 
-          return res.status(200).send({usuario:facturadorGuardado});
+            return res.status(200).send({usuario:usuarioGuardado});
+          });
         });
-      });
-    } else {
-      return res.status(500).send({mensaje:"Correo Existente, ingrese uno nuevo"});
-    }
+      } else {
+        return res.status(500).send({mensaje:"Correo Existente, ingrese uno nuevo"});
+      }
 
-})
+  })
 }else{
-return res.status(500).send({mensaje:"Complete los campos obligatorios"});
-}}
-
+  return res.status(500).send({mensaje:"Complete los campos obligatorios"});
+}
+}
 /* 3. agregar, ROL_EMPLEADO por defecto */
 function agregarEmpleado(req,res){
 
@@ -350,7 +351,7 @@ function getUsuariosRolGestor(req, res){
 
 /* 8. ver propio usuario por ID*/
 function getUsuarioIdRolAdministrador(req, res){
-  if(req.user.rol == 'ROL_ADMIN'){
+  if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción"});
   }
 
@@ -363,7 +364,9 @@ function getUsuarioIdRolAdministrador(req, res){
     return res.status(200).send({ usuario: administradorEncontrado})
   })
 }
-/* Funciones del ROL_FACTURADOR */
+
+
+/* TAREAS DEL ROL_FACTURADOR */
 /* Editar usuario */
 function editarUsuarioRolFacturador(req, res){
   if(req.user.rol !== 'ROL_FACTURADOR'){
