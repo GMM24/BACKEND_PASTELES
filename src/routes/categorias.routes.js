@@ -2,7 +2,6 @@ const express = require('express');
 
 const CategoriasController = require('../controllers/categorias.controller');
 const autenticacionToken = require ('../middlewares/autenticacion');
-const categoriasModel = require('../models/categorias.model');
 
 const api = express.Router();
 api.post('/agregarCategoria', autenticacionToken.Auth, CategoriasController.AgregarCategoria);

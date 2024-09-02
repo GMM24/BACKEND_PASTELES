@@ -10,21 +10,30 @@ function AgregarCategoria(req, res){
   if(req.user.rol !== 'ROL_GESTOR'){
     return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
   }
+  var parametros = req.body;
+  var categoriasModel = new Categorias();
 
-    var parametros = req.body;
-    var categoriaModel = new Categorias();
+  if(parametros.nombreCategoria && parametros.descripcionCategoria) {
+    categoriasModel.nombreCategoria = parametros.nombreCategoria;
+    categoriasModel.descripcionCategoria = parametros.descripcionCategoria;
+    categoriasModel.idUsuario = req.user.sub;
 
-    if(parametros.nombre&&parametros.descripcion){
-        categoriaModel.nombre = parametros.nombre;
-        categoriaModel.descripcion = parametros.descripcion;
-        categoriaModel.idAdministrador = req.user.sub;
-
-        categoriaModel.save((err, categoriaAlmacenada)=>{
-            if(err) return res.status(500).send({ mensaje: "Error en la peticion" });
-            if(!categoriaAlmacenada) return res.status(404).send( { mensaje: "Error, no se agrego ningun producto"});
-            return res.status(200).send({ categorias: categoriaAlmacenada});
+    Categorias.find({ nombreCategoria : parametros.nombreCategoria }, (err, categoriaEncontrada) => {
+      if ( categoriaEncontrada.length == 0 ) {
+        categoriasModel.save((err, categoriaGuardada) => {
+            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
+            if(!categoriaGuardada) return res.status(500).send({ mensaje: 'Error al agregar la categoria'});
+            
+            return res.status(200).send({ categorias: categoriaGuardada });
         })
-    }
+} else {
+    return res.status(500).send({ mensaje: 'Este nombre de categoría, ya  se encuentra utilizado. Según la política de la empresa, no es posible repetir nombres de categoría.' });
+}
+
+    })
+  }else{
+    return res.status(500).send({ mensaje: 'Debe llenar los campos necesarios'});
+}
 }
 
 
@@ -105,20 +114,30 @@ function AgregarCategoriaRolAdmin(req, res){
     return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción "});
   }
 
-    var parametros = req.body;
-    var categoriaModel = new Categorias();
+  var parametros = req.body;
+  var categoriasModel = new Categorias();
 
-    if(parametros.nombre&&parametros.descripcion){
-        categoriaModel.nombre = parametros.nombre;
-        categoriaModel.descripcion = parametros.descripcion;
-        categoriaModel.idAdministrador = req.user.sub;
+  if(parametros.nombreCategoria && parametros.descripcionCategoria) {
+    categoriasModel.nombreCategoria = parametros.nombreCategoria;
+    categoriasModel.descripcionCategoria = parametros.descripcionCategoria;
+    categoriasModel.idUsuario = req.user.sub;
 
-        categoriaModel.save((err, categoriaAlmacenada)=>{
-            if(err) return res.status(500).send({ mensaje: "Error en la peticion" });
-            if(!categoriaAlmacenada) return res.status(404).send( { mensaje: "Error, no se agrego ningun producto"});
-            return res.status(200).send({ categorias: categoriaAlmacenada});
+    Categorias.find({ nombreCategoria : parametros.nombreCategoria }, (err, categoriaEncontrada) => {
+      if ( categoriaEncontrada.length == 0 ) {
+        categoriasModel.save((err, categoriaGuardada) => {
+            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
+            if(!categoriaGuardada) return res.status(500).send({ mensaje: 'Error al agregar la categoria'});
+            
+            return res.status(200).send({ categorias: categoriaGuardada });
         })
-    }
+} else {
+    return res.status(500).send({ mensaje: 'Este nombre de categoría, ya  se encuentra utilizado. Según la política de la empresa, no es posible repetir nombres de categoría.' });
+}
+
+    })
+  }else{
+    return res.status(500).send({ mensaje: 'Debe llenar los campos necesarios'});
+}
 }
 function editarCategoriaRolAdmin(req, res){
     

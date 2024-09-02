@@ -1,17 +1,15 @@
-// MODELO PRODUCTOS AXEL JAVIER GUADALUPE ALVAREZ FELIPE
-const mongoose = require('mongoose');
+
+const mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
 var ProductosSchema = Schema({
-    
-    nombre: String,
-    cantidad: Number,
-    vendido: Number,
+    nombreProducto: String,
+    marca:String,
+    descripcion:String,
+    stock: Number,
     precio: Number,
-    preciocompra: Number,
-    
-
-    idCategoria: {type: Schema.Types.ObjectId, ref: 'Categorias'}
+    vendido:Number,
+    idCategoria: {type:Schema.Types.ObjectId,ref:'Categorias'},
 });
 
-module.exports = mongoose.model('Productos', ProductosSchema)
+module.exports = mongoose.model('Productos',ProductosSchema);

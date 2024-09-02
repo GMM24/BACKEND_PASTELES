@@ -13,16 +13,6 @@ const UsuarioSchema = Schema({
     direccion: String,
     departamento: String,
     municipio: String,
-
-    carrito: [{
-        nombreProducto: String,
-        cantidadComprada: Number,
-        precioUnitario: Number,
-        subTotal: Number
-    }],
-    
-    totalCarrito: Number
-    
 });
 
 module.exports = mongoose.model('Usuarios', UsuarioSchema);

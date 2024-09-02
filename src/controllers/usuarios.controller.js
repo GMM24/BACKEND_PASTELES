@@ -50,7 +50,7 @@ if(parametros.nombre && parametros.apellido && parametros.email && parametros.pa
   usuarioModel.direccion = parametros.direccion;
   usuarioModel.departamento = parametros.departamento;
   usuarioModel.municipio = parametros.municipio;
-  usuarioModel.totalCarrito = 0;
+  
 
 
   //Verificacion de email
@@ -189,7 +189,7 @@ if(parametros.nombre && parametros.apellido && parametros.email && parametros.pa
   usuarioModel.direccion = parametros.direccion;
   usuarioModel.departamento = parametros.departamento;
   usuarioModel.municipio = parametros.municipio;
-  usuarioModel.totalCarrito = 0;
+
 
  //Verificacion de email
   Usuarios.find({email:parametros.email}, (err, usuarioEncontrado) => {
