@@ -122,7 +122,7 @@ function eliminarUsuarioRolCliente(req, res){
 function getUsuariosRolCliente(req, res){
 
   // VERIFICADOR
-  if(req.user.rol!== 'ROL_CLIENTE'){
+  if(req.user.rol!== 'ROL_ADMIN'){
     return res.status(500).send({mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
 
   }
@@ -404,7 +404,7 @@ function eliminarUsuarioRolFacturador(req, res){
 function getUsuariosRolFacturador(req, res){
 
   // VERIFICADOR
-  if(req.user.rol!== 'ROL_FACTURADOR'){
+  if(req.user.rol!== 'ROL_ADMIN'){
     return res.status(500).send({mensaje: "Unicamente el ROL_FACTURADOR puede realizar esta acción"});
 
   }
