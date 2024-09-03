@@ -250,6 +250,53 @@ function RegistrarCarrito(req, res) {
      })
 }
 
+
+function EliminarProductoCarrito(req, res) {
+    var idProd = req.params.idProducto
+
+    if ( req.user.rol == "ROL_ADMINISTRADOR" ) return res.status(500)
+    .send({ mensaje: 'No tiene acceso a registar Carritos. Únicamente el Cliente puede hacerlo.'});
+
+    Carritos.findOne({idUsuario:req.user.sub},(err, carritoUsuario)=>{
+        if(err) return res.status(500).send({ mensaje:"Error en la peticion, el usuario no posee carritos"})
+        if(!carritoUsuario) return res.status(500).send({ mensaje:"El usuario no posee carritos, no puede acceder a esta función"})
+            
+            var finalFord = 0                                    
+       
+                for (let i = 0; i <carritoUsuario.compras.length;i++){
+                        if ( carritoUsuario.compras[i].idProducto == idProd){
+                           
+                            var idELiminar = carritoUsuario.compras[i]._id
+                         
+
+                            var totalModificado = 0
+                            var totalModificado = ((carritoUsuario.total)-(carritoUsuario.compras[i].subTotal))
+                            Carritos.findOneAndUpdate({_idUsuario:req.user.sub},{total:totalModificado,
+                                $pull: {
+                                    compras: {_id:idELiminar}
+                                }
+                            }, { new: true},  
+                                (err, carritoActualizado)=>{  
+                              
+                                    if(err) return res.status(500).send({ mensaje: "Error en la peticion de modificar carrito"});
+                                    if(!carritoActualizado) return res.status(500).send({ mensaje: 'Error al modificar el carrito'});
+            
+                                    return res.status(200).send({mensaje:"PRODUCTO ELIMINADO DEL CARRITO", carrito: carritoActualizado })
+                            }).populate('idUsuario','nombre');
+                        }else{
+                            finalFord++ 
+                            if(finalFord == carritoUsuario.compras.length){
+                                return res.status(200).send({mensaje:'El producto no existe en el carrito'})
+                            }
+                        }
+                    
+                }
+
+        })
+
+
+}
 module.exports = {
-    RegistrarCarrito
+    RegistrarCarrito,
+    EliminarProductoCarrito
 }
