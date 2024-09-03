@@ -8,7 +8,8 @@ const api = express.Router();
 api.post('/login', usuarioController.Login);
 api.post('/agregarUsuario',usuarioController.agregarUsuario);
 
-/* ---------- TAREAS DEL ROL_CLIENTE --------- */
+/* ---------- ADMINISTRACIÓN DEL ROL ADMIN --------- */
+api.post ('/agregarRolCliente', autenticacionToken.Auth,  usuarioController.agregarClienteRolAdmin);
 /* Editar usuario, el ID es el que se puso en el codigo */
 api.put ('/editarRolCliente/:ID', autenticacionToken.Auth, usuarioController.editarUsuarioRolCliente);
 /* Eliminar usuario por medio del id*/

@@ -169,6 +169,55 @@ function getUsuarioIdRolCliente(req, res){
   
     })
   }
+
+
+  /* 2. agregar, ROL_FACTURADOR por defecto */
+function agregarClienteRolAdmin(req,res){
+
+  if(req.user.rol !== 'ROL_ADMIN'){
+    return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
+
+  }
+
+  var parametros = req.body;
+  var usuarioModel = new Usuarios();
+if(parametros.nombre && parametros.apellido && parametros.email && parametros.password){
+  usuarioModel.nombre = parametros.nombre;
+  usuarioModel.apellido = parametros.apellido;
+  usuarioModel.email = parametros.email;
+  usuarioModel.password = parametros.password;
+  usuarioModel.rol = 'ROL_CLIENTE'; 
+  usuarioModel.telefono = parametros.telefono;
+  usuarioModel.direccion = parametros.direccion;
+  usuarioModel.departamento = parametros.departamento;
+  usuarioModel.municipio = parametros.municipio;
+
+
+ //Verificacion de email
+  Usuarios.find({email:parametros.email}, (err, usuarioEncontrado) => {
+      if (usuarioEncontrado.length == 0) {
+        bcrypt.hash(parametros.password,null,null, (err, passwordEncriptada) =>{
+          usuarioModel.password = passwordEncriptada;
+
+
+
+          usuarioModel.save((err, usuarioGuardado)=> {
+            if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+            if (!usuarioGuardado)return res.status(500).send({mensaje : "Error al agregar el cliente"});
+
+            return res.status(200).send({usuario:usuarioGuardado});
+          });
+        });
+      } else {
+        return res.status(500).send({mensaje:"Correo Existente, ingrese uno nuevo"});
+      }
+
+  })
+}else{
+  return res.status(500).send({mensaje:"Complete los campos obligatorios"});
+}
+}
+
 /* 2. agregar, ROL_FACTURADOR por defecto */
 function agregarFacturador(req,res){
 
@@ -529,7 +578,8 @@ module.exports = {
     editarUsuarioRolGestor,
     eliminarUsuarioRolGestor,
     getUsuariosRoLGestor,
-    getUsuarioIdRolGestor
+    getUsuarioIdRolGestor,
+    agregarClienteRolAdmin
 }
 
 
