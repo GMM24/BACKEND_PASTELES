@@ -83,7 +83,7 @@ if(parametros.nombre && parametros.apellido && parametros.email && parametros.pa
 // 1. editar usuario
 function editarUsuarioRolCliente(req, res){
 
-  if(req.user.rol !== 'ROL_CLIENTE'){
+  if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({mensaje:"Unicamente el ROL_CLIENTE puede realizar esta acción"});
 
   }
@@ -103,7 +103,7 @@ function editarUsuarioRolCliente(req, res){
 function eliminarUsuarioRolCliente(req, res){
 
   // siempre poner esto al principio, es para verificar quien puede realizar la acción
-  if(req.user.rol !== 'ROL_CLIENTE'){
+  if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción "});
   }
 
@@ -369,7 +369,7 @@ function getUsuarioIdRolAdministrador(req, res){
 /* TAREAS DEL ROL_FACTURADOR */
 /* Editar usuario */
 function editarUsuarioRolFacturador(req, res){
-  if(req.user.rol !== 'ROL_FACTURADOR'){
+  if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({mensaje:"Unicamente el ROL_FACTURADOR puede realizar esta acción"});
   }
   var parametros = req.body;
@@ -386,7 +386,7 @@ function editarUsuarioRolFacturador(req, res){
 function eliminarUsuarioRolFacturador(req, res){
 
   // siempre poner esto al principio, es para verificar quien puede realizar la acción
-  if(req.user.rol !== 'ROL_FACTURADOR'){
+  if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({mensaje:"Unicamente el ROL_FACTURADOR puede realizar esta acción"});
   }
 
@@ -404,7 +404,7 @@ function eliminarUsuarioRolFacturador(req, res){
 function getUsuariosRolFacturador(req, res){
 
   // VERIFICADOR
-  if(req.user.rol!== 'ROL_FACTURADOR'){
+  if(req.user.rol!== 'ROL_ADMIN'){
     return res.status(500).send({mensaje: "Unicamente el ROL_FACTURADOR puede realizar esta acción"});
 
   }
@@ -419,7 +419,7 @@ function getUsuariosRolFacturador(req, res){
 
 /* Ver usuario propio del ROL_FACTURADOR*/
 function getUsuarioIdRolFacturador(req, res){
-  if(req.user.rol!== 'ROL_FACTURADOR'){
+  if(req.user.rol!== 'ROL_ADMIN'){
     return res.status(500).send({ mensaje: "Unicamente el ROL_FACTURADOR puede realizar esta acción"});
   }
   // buscar por id
@@ -439,7 +439,7 @@ function getUsuarioIdRolFacturador(req, res){
 
 /*TAREAS DE ROL GESTOR*/
 function editarUsuarioRolGestor(req,res){
-  if(req.user.rol !== 'ROL_GESTOR'){
+  if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({mensaje:"Unicamente el ROL_GESTOR puede realizar esta acción"});
 
   }
@@ -456,7 +456,7 @@ function editarUsuarioRolGestor(req,res){
 /*eliminar perfil de gestor*/
 function eliminarUsuarioRolGestor(req, res){
 
-  if(req.user.rol !== 'ROL_GESTOR'){
+  if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
   }
 
@@ -474,7 +474,7 @@ function eliminarUsuarioRolGestor(req, res){
 function getUsuariosRoLGestor(req, res){
 
   // VERIFICADOR
-  if(req.user.rol!== 'ROL_GESTOR'){
+  if(req.user.rol!== 'ROL_ADMIN'){
     return res.status(500).send({mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
 
   }
@@ -489,7 +489,7 @@ function getUsuariosRoLGestor(req, res){
 
 /* Ver usuario propio del ROL_GESTOR*/
 function getUsuarioIdRolGestor(req, res){
-  if(req.user.rol!== 'ROL_GESTOR'){
+  if(req.user.rol!== 'ROL_ADMIN'){
     return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción"});
   }
   // buscar por id
