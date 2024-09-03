@@ -318,7 +318,7 @@ function getUsuariosRolFacturador(req, res){
   })
 }
 
-/* 6.  ver usuarios con ROL_EMPLEADO  */
+/* 6.  ver usuarios con unicamente ROL_EMPLEADO  */
 function getUsuariosRolEmpleado(req, res){
   if(req.user.rol !== 'ROL_ADMIN'){
     return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
