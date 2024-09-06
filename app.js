@@ -15,7 +15,9 @@ const CarritosRutas = require ('./src/routes/carritos.routes');
 
 const EmpresaRutas = require ('./src/routes/empresa.routes');
 
-const SucursalesRutas = require ('./src/routes/sucursales.routes')
+const SucursalesRutas = require ('./src/routes/sucursales.routes');
+
+const FacturasRutas = require('./src/routes/facturas.routes');
  
 // MIDDLEWARE INTERMEDIARIO
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +27,6 @@ app.use(express.json());
 app.use(cors());
 
 // CARGA DE RUTAS 
-app.use('/api', UsuariosRutas, CategoriasRutas, ProductosRutas, CarritosRutas, EmpresaRutas, SucursalesRutas);
+app.use('/api', UsuariosRutas, CategoriasRutas, ProductosRutas, CarritosRutas, EmpresaRutas, SucursalesRutas, FacturasRutas);
 
 module.exports = app;

@@ -10,6 +10,7 @@ var ProductosSchema = Schema({
     precio: Number,
     vendido:Number,
     idCategoria: {type:Schema.Types.ObjectId,ref:'Categorias'},
+    idSucursal:  {type:Schema.Types.ObjectId,ref:'sucursales'}
 });
 
 module.exports = mongoose.model('Productos',ProductosSchema);
