@@ -9,7 +9,7 @@ var EmpresaSchema = Schema({
     vision:String,
     historia:String,
 
-    idEmpresa: {type:Schema.Types.ObjectId,ref:'Usuarios'}
+    idUsuario: {type:Schema.Types.ObjectId,ref:'Usuarios'}
 });
 
 module.exports = mongoose.model('Empresas',EmpresaSchema);

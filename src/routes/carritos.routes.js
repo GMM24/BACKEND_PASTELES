@@ -9,5 +9,8 @@ api.post('/registrarCarrito',autenticacionToken.Auth, CarritosController.Registr
 //eliminacion de carrito
 api.delete('/eliminarProductosCarritos/:idProducto',autenticacionToken.Auth, CarritosController.EliminarProductoCarrito);
 
+// agregar carrito por medio del id del producto
+api.put ('/registrarCarritoPorId/:ID', autenticacionToken.Auth, CarritosController.agregarCarritoPorIdProducto);
+
 
 module.exports= api;
