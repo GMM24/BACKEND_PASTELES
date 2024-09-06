@@ -84,7 +84,7 @@ if(parametros.nombre && parametros.apellido && parametros.email && parametros.pa
 function editarUsuarioRolCliente(req, res){
 
   if(req.user.rol !== 'ROL_ADMIN'){
-    return res.status(500).send({mensaje:"Unicamente el ROL_CLIENTE puede realizar esta acción"});
+    return res.status(500).send({mensaje:"Unicamente el ROL_ADMIN puede realizar esta acción"});
 
   }
 
@@ -104,7 +104,7 @@ function eliminarUsuarioRolCliente(req, res){
 
   // siempre poner esto al principio, es para verificar quien puede realizar la acción
   if(req.user.rol !== 'ROL_ADMIN'){
-    return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción "});
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción "});
   }
 
   var idCliente = req.params.ID;
@@ -123,7 +123,7 @@ function getUsuariosRolCliente(req, res){
 
   // VERIFICADOR
   if(req.user.rol!== 'ROL_ADMIN'){
-    return res.status(500).send({mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
+    return res.status(500).send({mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción"});
 
   }
 
@@ -138,7 +138,7 @@ function getUsuariosRolCliente(req, res){
 /* 4. ver a un perfil que tenga ROL_CLIENTE por el ID*/
 function getUsuarioIdRolCliente(req, res){
   if(req.user.rol!== 'ROL_CLIENTE'){
-    return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción"});
   }
 
   // buscar por id

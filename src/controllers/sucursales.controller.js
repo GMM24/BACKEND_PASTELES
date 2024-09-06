@@ -56,6 +56,4 @@ function AgregarSucursal(req, res){
     
 
 }
-module.exports(
-    AgregarSucursal
-)
+module.exports={AgregarSucursal}
