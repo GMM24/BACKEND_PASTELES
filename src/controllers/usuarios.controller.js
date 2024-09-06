@@ -137,7 +137,7 @@ function getUsuariosRolCliente(req, res){
 
 /* 4. ver a un perfil que tenga ROL_CLIENTE por el ID*/
 function getUsuarioIdRolCliente(req, res){
-  if(req.user.rol!== 'ROL_CLIENTE'){
+  if(req.user.rol!== 'ROL_ADMIN'){
     return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción"});
   }
 
