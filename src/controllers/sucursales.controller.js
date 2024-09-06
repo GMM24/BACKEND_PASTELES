@@ -111,6 +111,8 @@ function obtenerSucursalesporIdGestor(req, res) {
     });
 
 }
+
+
 module.exports = {
     AgregarSucursal,
     obtenerSucursalesporIdGestor
