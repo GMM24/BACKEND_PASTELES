@@ -89,7 +89,7 @@ function AgregarSucursal(req, res) {
 /* SOLO ADMIN */
 function obtenerSucursalesporIdGestor(req, res) {
 
-     if (req.user.rol !== 'ROL_ADMIN') {
+    if (req.user.rol !== 'ROL_ADMIN') {
         return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
     }
 
@@ -113,8 +113,37 @@ function obtenerSucursalesporIdGestor(req, res) {
 }
 
 
+/* SOLO ADMIN */
+function obtenersucursalesPorIdEmpresa(req, res) {
+
+    // Verificar el rol del usuario
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(403).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
+    }
+
+    const idEmpresa = req.params.ID; // ID de la empresa desde la ruta
+
+    // Validar que se reciba el ID de la empresa
+    if (!idEmpresa) {
+        return res.status(400).send({ mensaje: 'Falta el ID de la empresa.' });
+    }
+
+    // Buscar las sucursales donde la empresa sea parte de ellas
+    Sucursales.find({ idEmpresa: idEmpresa }, (err, sucursalesEncontradas) => {
+        if (err) return res.status(500).send({ mensaje: 'Error al buscar las sucursales.' });
+        if (!sucursalesEncontradas || sucursalesEncontradas.length === 0) {
+            return res.status(404).send({ mensaje: 'No se encontraron sucursales para la empresa proporcionada.' });
+        }
+
+        return res.status(200).send({ sucursales: sucursalesEncontradas });
+    });
+}
+
+/* editar, eliminar, ver todas sucursales, ver sucursal por id*/
+
 module.exports = {
     AgregarSucursal,
-    obtenerSucursalesporIdGestor
+    obtenerSucursalesporIdGestor,
+    obtenersucursalesPorIdEmpresa
 }
 
