@@ -3,8 +3,9 @@ const jwt = require('../services/jwt');
 const Empresas = require('../models/empresas.model');
 
 function agregarEmpresaRolAdmin(req, res) {
-    if(req.user.rol !== 'ROL_ADMIN'){
-        return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción "});
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    
       }
       var parametros = req.body;
       var empresasModel = new Empresas();
@@ -40,24 +41,26 @@ function agregarEmpresaRolAdmin(req, res) {
 
 
 function editarEmpresaRolAdmin(req,res){
-    if (req.user.rol !== 'ROL_ADMIN ') {
-        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
-    }
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    
+      }
 
     var parametros=req.body;
     var idAdmin = req.params.ID;    
 
     Empresas.findByIdAndUpdate(idAdmin, parametros, {new:true},(err, empresasEncontradas)=>{
         if (err) return res.status(500).send({mensaje: "Error en la peticion"});
-        if (!categoriaEncontrada)return res.status(500).send({mensaje : "Error al editar la Empresa"});
+        if (!empresasEncontradas)return res.status(500).send({mensaje : "Error al editar la Empresa"});
         return res.status(200).send({empresas: empresasEncontradas}); 
     })
 }
 
 function eliminarEmpresaRolAdmin(req,res){
-    if (req.user.rol !== 'ROL_ADMIN ') {
-        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
-    }
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    
+      }
 
     var idAdmin = req.params.ID;
     Empresas.findByIdAndDelete(idAdmin,(err, eliminarEmpresa)=>{
@@ -68,9 +71,10 @@ function eliminarEmpresaRolAdmin(req,res){
 }
 
 function getEmpresaRolAdmin(req,res){
-    if (req.user.rol !== 'ROL_ADMIN ') {
-        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
-    }
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    
+      }
 
     Empresas.find({ rol: 'ROL_ADMIN'}, (err, empresaEncontrada)=>{
         if(err) return res.status(500).send({ mensaje: "Error en la petición"});
@@ -80,8 +84,9 @@ function getEmpresaRolAdmin(req,res){
 }
 
 function getEmpresaIdRolAdmin(req,res){
-    if (req.user.rol !== 'ROL_ADMIN ') {
-        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    
     }
     var idAdmin = req.params.ID;
 
@@ -138,7 +143,7 @@ function editarEmpresaRolGestor(req,res){
 
     Empresas.findByIdAndUpdate(idGestor, parametros, {new:true},(err, empresasEncontradas)=>{
         if (err) return res.status(500).send({mensaje: "Error en la peticion"});
-        if (!categoriaEncontrada)return res.status(500).send({mensaje : "Error al editar la Empresa"});
+        if (!empresasEncontradas)return res.status(500).send({mensaje : "Error al editar la Empresa"});
         return res.status(200).send({empresas: empresasEncontradas}); 
     })
 }
