@@ -11,7 +11,14 @@ api.get('/verSucursalPorGestor/:ID', autenticacionToken.Auth, SucursalesControll
 /* ver sucursales por el id de la empresa*/
 api.get('/verSucursalPorEmpresa/:ID', autenticacionToken.Auth, SucursalesController.obtenersucursalesPorIdEmpresa);
 
+
+//SOLO ADMIN
 /* editar, eliminar, ver todas sucursales, ver sucursal por id*/
+api.put('/editarSucursalRolAdmin/:ID', autenticacionToken.Auth, SucursalesController.editarSucursalRolAdmin);
+api.delete('/eliminarSucursalRolAdmin/:ID' , autenticacionToken.Auth, SucursalesController.eliminarSucursalRolAdmin);
+api.get('/verSucursalRolAdmin',autenticacionToken.Auth , SucursalesController.verSucursalRolAdmin);
+api.get('/verSucursalIDRolAdmin/:ID', autenticacionToken.Auth , SucursalesController.verSucursalIdRolAdmin);
+
 
 
 module.exports= api;

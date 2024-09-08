@@ -140,10 +140,64 @@ function obtenersucursalesPorIdEmpresa(req, res) {
 }
 
 /* editar, eliminar, ver todas sucursales, ver sucursal por id*/
+function editarSucursalRolAdmin(req,res){
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
+    }
+
+    var parametros= req.body;
+    var idAdmin = req.params.ID;
+
+    Sucursales.findByIdAndUpdate(idAdmin, parametros, {new:true},(err, sucursalesEncontradas)=>{
+        if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+        if (!sucursalesEncontradas)return res.status(500).send({mensaje : "Error al editar la Sucursal"});
+        return res.status(200).send({sucursales: sucursalesEncontradas});           
+    })
+}
+
+function eliminarSucursalRolAdmin(req,res){
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    }
+
+    var idAdmin = req.params.ID;
+    Sucursales.findByIdAndDelete(idAdmin,(err,eliminarSucursal)=>{
+        if (err) return res.status(500).send({mensaje: "Error en la peticion"});
+        if (!eliminarSucursal)return res.status(500).send({mensaje : "Error al eliminar la Sucursal"});
+        return res.status(200).send({sucursales: eliminarSucursal});
+    })
+}
+function verSucursalRolAdmin(req,res){
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    }
+
+    Sucursales.find({rol: 'ROL_ADMIN'},(err, sucursalEncontrada)=>{
+        if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+        if(!sucursalEncontrada) return res.status(500).send({ mensaje: "Error al ver las sucursales"});
+        return res.status(200).send({ sucursales: sucursalEncontrada});
+    })
+}
+function verSucursalIdRolAdmin(req,res){
+    if (req.user.rol !== 'ROL_ADMIN') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
+    }
+    var idAdmin = req.params.ID;
+
+    Sucursales.findById(idAdmin, (err,sucursalEncontrada)=>{
+        if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+        if(!sucursalEncontrada) return res.status(500).send({ mensaje: "Error al ver las sucrusales"});
+        return res.status(200).send({ sucursales: sucursalEncontrada});
+    })
+}
 
 module.exports = {
     AgregarSucursal,
     obtenerSucursalesporIdGestor,
-    obtenersucursalesPorIdEmpresa
+    obtenersucursalesPorIdEmpresa,
+    editarSucursalRolAdmin,
+    eliminarSucursalRolAdmin,
+    verSucursalRolAdmin,
+    verSucursalIdRolAdmin
 }
 
