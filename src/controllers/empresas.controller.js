@@ -11,6 +11,11 @@ function agregarEmpresaRolAdmin(req, res) {
       var parametros = req.body;
       var empresasModel = new Empresas();
     
+
+
+
+
+      
       if(parametros.nombreEmpresa && parametros.direccion && parametros.telefono) {
         empresasModel.nombreEmpresa = parametros.nombreEmpresa;
         empresasModel.direccion = parametros.direccion;

@@ -11,6 +11,8 @@ api.get('/verSucursalPorGestor/:ID', autenticacionToken.Auth, SucursalesControll
 /* ver sucursales por el id de la empresa*/
 api.get('/verSucursalPorEmpresa/:ID', autenticacionToken.Auth, SucursalesController.obtenersucursalesPorIdEmpresa);
 
+/* NUEVA FUNCION PARA AGREGAR SUCURSAL AUTOMATIZA PROCESOS */
+api.post('/agregarSucursalPor/:idEmpresa/:idUsuario', autenticacionToken.Auth, SucursalesController.AgregarSucursalPorIdEmpresaUsuario);
 
 //SOLO ADMIN
 /* editar, eliminar, ver todas sucursales, ver sucursal por id*/
