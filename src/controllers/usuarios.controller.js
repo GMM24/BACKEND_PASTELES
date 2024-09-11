@@ -83,20 +83,38 @@ function agregarUsuario(req, res) {
 // 1. editar usuario
 function editarUsuarioRolCliente(req, res) {
 
+   // Verificar el rol de usuario
   if (req.user.rol !== 'ROL_ADMIN') {
-    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
-
+    return res.status(403).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
   }
 
   var parametros = req.body;
-  /* este es el id que se pone en la ruta */
   var idCliente = req.params.ID;
-  Usuarios.findByIdAndUpdate(idCliente, parametros, { new: true }, (err, usuarioEncontrado) => {
-    if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-    if (!usuarioEncontrado) return res.status(500).send({ mensaje: "Error al editar  el cliente" });
-    return res.status(200).send({ usuario: usuarioEncontrado });
 
-  })
+  // Verificar si se está intentando cambiar el email
+  if (parametros.email) {
+    // Buscar si el email ya existe en otro usuario
+    Usuarios.findOne({ email: parametros.email, _id: { $ne: idCliente } }, (err, emailExistente) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (emailExistente) {
+        return res.status(400).send({ mensaje: "El email ya está en uso por otro usuario." });
+      }
+
+      // Si el email no existe, proceder a actualizar
+      Usuarios.findByIdAndUpdate(idCliente, parametros, { new: true }, (err, usuarioEncontrado) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+        if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+        return res.status(200).send({ usuario: usuarioEncontrado });
+      });
+    });
+  } else {
+    // Si no se proporciona un nuevo email, proceder a actualizar directamente
+    Usuarios.findByIdAndUpdate(idCliente, parametros, { new: true }, (err, usuarioEncontrado) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+      return res.status(200).send({ usuario: usuarioEncontrado });
+    });
+  }
 }
 
 // 2. eliminar usuario
@@ -423,17 +441,38 @@ function getUsuarioIdRolAdministrador(req, res) {
 /* TAREAS DEL ROL_FACTURADOR */
 /* Editar usuario */
 function editarUsuarioRolFacturador(req, res) {
+  // Verificar el rol de usuario
   if (req.user.rol !== 'ROL_ADMIN') {
-    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+    return res.status(403).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
   }
+
   var parametros = req.body;
-  /* este es el id que se pone en la ruta */
   var idFacturador = req.params.ID;
-  Usuarios.findByIdAndUpdate(idFacturador, parametros, { new: true }, (err, usuarioEncontrado) => {
-    if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-    if (!usuarioEncontrado) return res.status(500).send({ mensaje: "Error al editar  el cliente" });
-    return res.status(200).send({ usuario: usuarioEncontrado });
-  })
+
+  // Verificar si se está intentando cambiar el email
+  if (parametros.email) {
+    // Buscar si el email ya existe en otro usuario
+    Usuarios.findOne({ email: parametros.email, _id: { $ne: idFacturador } }, (err, emailExistente) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (emailExistente) {
+        return res.status(400).send({ mensaje: "El email ya está en uso por otro usuario." });
+      }
+
+      // Si el email no existe, proceder a actualizar
+      Usuarios.findByIdAndUpdate(idFacturador, parametros, { new: true }, (err, usuarioEncontrado) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+        if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+        return res.status(200).send({ usuario: usuarioEncontrado });
+      });
+    });
+  } else {
+    // Si no se proporciona un nuevo email, proceder a actualizar directamente
+    Usuarios.findByIdAndUpdate(idFacturador, parametros, { new: true }, (err, usuarioEncontrado) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+      return res.status(200).send({ usuario: usuarioEncontrado });
+    });
+  }
 }
 
 /* Eliminar usuario*/
@@ -493,19 +532,38 @@ function getUsuarioIdRolFacturador(req, res) {
 
 /*TAREAS DE ROL GESTOR*/
 function editarUsuarioRolGestor(req, res) {
+  // Verificar el rol de usuario
   if (req.user.rol !== 'ROL_ADMIN') {
-    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
-
+    return res.status(403).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
   }
 
   var parametros = req.body;
   var idGestor = req.params.ID;
-  Usuarios.findByIdAndUpdate(idGestor, parametros, { new: true }, (err, gestoresEncontrados) => {
-    if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-    if (!gestoresEncontrados) return res.status(500).send({ mensaje: "Error al editar el gestor" });
-    return res.status(200).send({ usuario: gestoresEncontrados });
 
-  })
+  // Verificar si se está intentando cambiar el email
+  if (parametros.email) {
+    // Buscar si el email ya existe en otro usuario
+    Usuarios.findOne({ email: parametros.email, _id: { $ne: idGestor } }, (err, usuarioEncontrado) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (usuarioEncontrado) {
+        return res.status(400).send({ mensaje: "El email ya está en uso por otro usuario." });
+      }
+
+      // Si el email no existe, proceder a actualizar
+      Usuarios.findByIdAndUpdate(idGestor, parametros, { new: true }, (err, gestoresEncontrados) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+        if (!gestoresEncontrados) return res.status(404).send({ mensaje: "Error al editar el gestor" });
+        return res.status(200).send({ usuario: gestoresEncontrados });
+      });
+    });
+  } else {
+    // Si no se proporciona un nuevo email, proceder a actualizar
+    Usuarios.findByIdAndUpdate(idGestor, parametros, { new: true }, (err, gestoresEncontrados) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (!gestoresEncontrados) return res.status(404).send({ mensaje: "Error al editar el gestor" });
+      return res.status(200).send({ usuario: gestoresEncontrados });
+    });
+  }
 }
 /*eliminar perfil de gestor*/
 function eliminarUsuarioRolGestor(req, res) {
