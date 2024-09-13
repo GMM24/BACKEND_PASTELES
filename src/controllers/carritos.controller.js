@@ -308,61 +308,53 @@ function agregarCarritoPorIdProducto(req, res){
     // Verifica si existe el carrito de mi usuario
     Carritos.findOne({ idUsuario: req.user.sub }, (err, carritoUsuario) => {
         if (err) return res.status(500).send({ mensaje: 'Error al agregar carrito' });
-        
-        if (carritoUsuario == null) { // Crear carrito para usuario
-            var carritoModel = new Carritos();
-            carritoModel.idUsuario = req.user.sub;
-            carritoModel.total = 0;
 
-            // Guarda un carrito para usuario
-            carritoModel.save((err, carrritoUsuario) => {
-                if (err) return res.status(500).send({ mensaje: 'Error en la petición' });
-                if (!carrritoUsuario) return res.status(500).send({ mensaje: 'Error al agregar el carrito' });
+        // Verifica la existencia del producto
+        Productos.findById(idProd, (err, productoEncontrado) => {
+            if (err || !productoEncontrado) return res.status(500).send({ mensaje: 'Error al buscar producto' });
 
-                // Verifica si el producto existe
-                Productos.findById(idProd, (err, productoEncontrado) => {
-                    if (err || !productoEncontrado) return res.status(500).send({ mensaje: 'Error al buscar producto' });
+            // Verifica la cantidad
+            const cantidad = Number(parametros.cantidad); // Asegúrate de convertir a número
+            if (cantidad <= 0) return res.status(500).send({ mensaje: 'La cantidad no puede ser menor o igual a cero' });
+            if (cantidad > productoEncontrado.stock) return res.status(500).send({ mensaje: 'Cantidad excede el stock disponible' });
 
-                    // Verifica la cantidad
-                    const cantidad = Number(parametros.cantidad); // Asegúrate de convertir a número
-                    if (cantidad <= 0) return res.status(500).send({ mensaje: 'La cantidad no puede ser menor o igual a cero' });
-                    if (cantidad > productoEncontrado.stock) return res.status(500).send({ mensaje: 'Cantidad excede el stock disponible' });
+            // Crea el objeto de compra con datos adicionales
+            const compra = {
+                idProducto: productoEncontrado._id,
+                nombreProducto: productoEncontrado.nombreProducto,
+                cantidad: cantidad,
+                precio: productoEncontrado.precio,
+                subTotal: cantidad * productoEncontrado.precio,
+                descripcionCategoria: productoEncontrado.descripcionCategoria, // Agrega la categoría
+                datosSucursal: productoEncontrado.datosSucursal // Agrega los datos de sucursal
+            };
 
-                    var subtotalAgregar = cantidad * productoEncontrado.precio;
+            // Si no existe el carrito, crea uno nuevo
+            if (!carritoUsuario) {
+                var carritoModel = new Carritos();
+                carritoModel.idUsuario = req.user.sub;
+                carritoModel.total = 0;
 
-                    // Modifica el array y agrega el producto
+                // Guarda un carrito para usuario
+                carritoModel.save((err, carrritoUsuario) => {
+                    if (err) return res.status(500).send({ mensaje: 'Error en la petición' });
+                    if (!carrritoUsuario) return res.status(500).send({ mensaje: 'Error al agregar el carrito' });
+
+                    // Agrega el producto al nuevo carrito
                     Carritos.findByIdAndUpdate(
                         { _id: carrritoUsuario._id },
                         {
-                            total: (carrritoUsuario.total + subtotalAgregar),
-                            $push: {
-                                compras: [{
-                                    idProducto: productoEncontrado._id,
-                                    nombreProducto: productoEncontrado.nombreProducto,
-                                    cantidad: cantidad,
-                                    precio: productoEncontrado.precio,
-                                    subTotal: subtotalAgregar
-                                }]
-                            }
+                            total: (carrritoUsuario.total + compra.subTotal),
+                            $push: { compras: compra }
                         },
                         { new: true },
                         (err, carritoActualizado) => {
                             if (err) return res.status(500).send({ mensaje: "Error al modificar carrito" });
                             return res.status(200).send({ mensaje: "Carrito creado y producto agregado", carrito: carritoActualizado });
                         }
-                    ).populate('idUsuario', 'nombre apellido email');
+                    );
                 });
-            });
-        } else { // Este usuario posee un carrito
-            // Verifica si el producto existe
-            Productos.findById(idProd, (err, productoEncontrado) => {
-                if (err || !productoEncontrado) return res.status(500).send({ mensaje: 'Error al buscar producto' });
-
-                // Verifica la cantidad
-                const cantidad = Number(parametros.cantidad); // Asegúrate de convertir a número
-                if (cantidad <= 0) return res.status(500).send({ mensaje: 'La cantidad no puede ser menor o igual a cero' });
-                if (cantidad > productoEncontrado.stock) return res.status(500).send({ mensaje: 'Cantidad excede el stock disponible' });
-
+            } else { // Este usuario posee un carrito
                 // Verifica si el producto ya está en el carrito
                 const productoEnCarrito = carritoUsuario.compras.find(item => item.idProducto.toString() === idProd);
 
@@ -391,21 +383,13 @@ function agregarCarritoPorIdProducto(req, res){
                     );
                 } else {
                     // Agrega un nuevo producto al carrito
-                    var subtotalAgregar = cantidad * productoEncontrado.precio;
-
                     Carritos.findByIdAndUpdate(
                         carritoUsuario._id,
                         {
                             $push: {
-                                compras: [{
-                                    idProducto: productoEncontrado._id,
-                                    nombreProducto: productoEncontrado.nombreProducto,
-                                    cantidad: cantidad,
-                                    precio: productoEncontrado.precio,
-                                    subTotal: subtotalAgregar
-                                }]
+                                compras: compra // Agrega el objeto de compra completo
                             },
-                            $inc: { total: subtotalAgregar }
+                            $inc: { total: compra.subTotal }
                         },
                         { new: true },
                         (err, carritoActualizado) => {
@@ -414,8 +398,8 @@ function agregarCarritoPorIdProducto(req, res){
                         }
                     );
                 }
-            });
-        }
+            }
+        });
     });
 }
 

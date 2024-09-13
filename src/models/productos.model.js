@@ -9,8 +9,20 @@ var ProductosSchema = Schema({
     stock: Number,
     precio: Number,
     vendido:Number,
-    idCategoria: {type:Schema.Types.ObjectId,ref:'Categorias'},
-    idSucursal:  {type:Schema.Types.ObjectId,ref:'sucursales'}
+
+    descripcionCategoria: [{
+
+        idCategoria: {type:Schema.Types.ObjectId,ref:'Categorias'},
+        nombreCategoria: String,
+    }],
+
+    datosSucursal: [{
+        idSucursal: {type:Schema.Types.ObjectId,ref:'Sucursales'},
+        nombreSucursal: String,
+        direccionSucursal: String,
+        telefonoSucursal: Number,
+    }]
+
 });
 
 module.exports = mongoose.model('Productos',ProductosSchema);

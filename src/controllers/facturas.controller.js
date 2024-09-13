@@ -87,13 +87,16 @@ function GenerarFactura(req,res){
 
 //esta es la que funciona
 function CrearFacturaCliente(req, res) {
+    const { nombre, email, sub } = req.user; // Desestructuración
     const parametros = req.body;
 
     if (req.user.rol !== 'ROL_CLIENTE') {
         return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción" });
     }
 
-    Carritos.findOne({ idUsuario: req.user.sub }, (err, carritoUsuario) => {
+    console.log("Datos del usuario:", req.user);
+
+    Carritos.findOne({ idUsuario: sub }, (err, carritoUsuario) => {
         if (err) return res.status(500).send({ mensaje: "Error en la petición" });
         if (!carritoUsuario) return res.status(500).send({ mensaje: "El usuario no posee carritos, no puede acceder a crear facturas, debe crear un carrito" });
         if (carritoUsuario.compras.length === 0) return res.status(500).send({ mensaje: "No existen productos en el carrito del usuario" });
@@ -116,7 +119,6 @@ function CrearFacturaCliente(req, res) {
                     });
                 }
 
-                // Actualizar el stock
                 const restarStock = compra.cantidad * -1;
                 const cantidadVendido = compra.cantidad;
                 return Productos.findByIdAndUpdate(compra.idProducto, { $inc: { stock: restarStock, vendido: cantidadVendido } }, { new: true });
@@ -128,22 +130,35 @@ function CrearFacturaCliente(req, res) {
                 const modelFactura = new Facturas();
                 modelFactura.nit = parametros.nit;
                 modelFactura.fecha = new Date();
-                modelFactura.compras = carritoUsuario.compras;
                 modelFactura.total = carritoUsuario.total;
-                modelFactura.idUsuario = req.user.sub;
+                modelFactura.idUsuario = sub;
 
-                // Limpiar el carrito
+                // Agregar datos del cliente
+                modelFactura.datosCliente = [{
+                    idUsuario: sub,
+                    nombre: nombre || "",
+                    email: email || ""
+                }];
+
+                modelFactura.compras = carritoUsuario.compras.map(compra => {
+                    return {
+                        idProducto: compra.idProducto,
+                        nombreProducto: compra.nombreProducto,
+                        cantidad: compra.cantidad,
+                        precio: compra.precio,
+                        subTotal: compra.subTotal,
+                        descripcionCategoria: compra.descripcionCategoria,
+                        datosSucursal: compra.datosSucursal
+                    };
+                });
+
                 return Carritos.findOneAndUpdate({ _id: carritoUsuario._id }, { compras: [], total: 0 }, { new: true })
                     .then(() => {
                         return modelFactura.save();
                     });
             })
             .then((agregarFactura) => {
-                // Generar el PDF después de guardar la factura
-                GenerarPDF.facturasPDF(carritoUsuario.idUsuario, agregarFactura._id);
-
-                // Enviar la respuesta al cliente
-                return res.status(200).send({ mensaje: "Factura generada exitosamente", factura: agregarFactura, PDF: "El PDF del usuario se ha creado exitosamente" });
+                return res.status(200).send({ mensaje: "Factura generada exitosamente", factura: agregarFactura });
             })
             .catch(error => {
                 if (error.mensaje) {
