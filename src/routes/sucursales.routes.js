@@ -21,6 +21,9 @@ api.delete('/eliminarSucursalRolAdmin/:ID' , autenticacionToken.Auth, Sucursales
 api.get('/verSucursalRolAdmin',autenticacionToken.Auth , SucursalesController.verSucursalRolAdmin);
 api.get('/verSucursalIDRolAdmin/:ID', autenticacionToken.Auth , SucursalesController.verSucursalIdRolAdmin);
 
+// tareas del rol GESTOR
+
+api.get('/verSucursalRolGestor',autenticacionToken.Auth , SucursalesController.verSucursalRolGestor);
 
 
 module.exports= api;

@@ -108,7 +108,7 @@ function AgregarSucursalPorIdEmpresaUsuario(req, res) {
         // Obtener los datos de la empresa para el array datosEmpresa
         const datosEmpresa = {
             idEmpresa: empresaEncontrada._id,
-            nombreEmpresa: empresaEncontrada.nombre, // Asegúrate de que el modelo Empresa tenga este campo
+            nombreEmpresa: empresaEncontrada.nombreEmpresa, // Asegúrate de que el modelo Empresa tenga este campo
             direccion: empresaEncontrada.direccion,   // Asegúrate de que el modelo Empresa tenga este campo
             telefono: empresaEncontrada.telefono       // Asegúrate de que el modelo Empresa tenga este campo
         };
@@ -262,6 +262,8 @@ function verSucursalRolAdmin(req,res){
         return res.status(200).send({ sucursales: sucursalEncontrada});
     })
 }
+
+
 function verSucursalIdRolAdmin(req,res){
     if (req.user.rol !== 'ROL_ADMIN') {
         return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
@@ -275,6 +277,27 @@ function verSucursalIdRolAdmin(req,res){
     })
 }
 
+
+
+function verSucursalRolGestor(req, res) {
+
+  
+  
+    if (req.user.rol !== 'ROL_GESTOR') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción " });
+    }
+
+    Sucursales.find((err, sucursalesEncontradas) => {
+  
+      if (err) return res.status(500).send({ mensaje: 'Error al buscar las sucursales' })
+      if (!sucursalesEncontradas) return res.status(500).send({ mensaje: 'No existen las sucursales' })
+  
+      return res.status(200).send({ sucursales: sucursalesEncontradas })
+  })
+  
+  }
+
+
 module.exports = {
     AgregarSucursal,
     obtenerSucursalesporIdGestor,
@@ -283,6 +306,7 @@ module.exports = {
     eliminarSucursalRolAdmin,
     verSucursalRolAdmin,
     verSucursalIdRolAdmin,
-    AgregarSucursalPorIdEmpresaUsuario
+    AgregarSucursalPorIdEmpresaUsuario,
+    verSucursalRolGestor
 }
 

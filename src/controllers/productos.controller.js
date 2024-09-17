@@ -65,7 +65,7 @@ function agregarProductoRolGestor(req, res) {
 
 
 
-/* */
+/* 
 function agregarProductoRolAdmin(req, res) {
     if (req.user.rol !== 'ROL_ADMIN') {
         return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
@@ -96,11 +96,83 @@ function agregarProductoRolAdmin(req, res) {
         return res.status(500)
             .send({ mensaje: 'Debe llenar los campos necesarios (nombreProducto, marca, descripción, stock, precio y nombreCategoria). Además, los campos no pueden ser vacíos' });
     }
-}
+} */
 
+
+    function verProductosPorCategoria(req, res) {
+
+        if (req.user.rol !== 'ROL_GESTOR') {
+            return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción " });
+        }
+        
+        const idSucursal = req.params.idSucursal; // ID de la sucursal desde la ruta
+        const idCategoria = req.params.idCategoria; // ID de la categoría desde la ruta
+    
+        // Validar que se reciban ambos IDs
+        if (!idSucursal || !idCategoria) {
+            return res.status(400).send({ mensaje: 'Faltan el ID de la sucursal o el ID de la categoría.' });
+        }
+    
+        // Buscar los productos por ID de sucursal y ID de categoría
+        Productos.find({ idSucursal, idCategoria }, (err, productosEncontrados) => {
+            if (err) return res.status(500).send({ mensaje: 'Error al buscar los productos.' });
+            if (!productosEncontrados || productosEncontrados.length === 0) {
+                return res.status(404).send({ mensaje: 'No se encontraron productos para la sucursal y categoría proporcionadas.' });
+            }
+    
+            return res.status(200).send({ productos: productosEncontrados });
+        });
+    }
+    
+
+
+    function obtenerProductosPorIdCategoria(req, res) {
+
+        if (req.user.rol !== 'ROL_GESTOR') {
+            return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción" });
+        }
+        
+        const idCategoria = req.params.ID; // ID de la categoría desde la ruta
+    
+        // Validar que se reciba el ID de la categoría
+        if (!idCategoria) {
+            return res.status(400).send({ mensaje: 'Falta el ID de la categoría.' });
+        }
+    
+        // Buscar los productos por ID de categoría en el array descripcionCategoria
+        Productos.find({ 'descripcionCategoria.idCategoria': idCategoria }, (err, productosEncontrados) => {
+            if (err) return res.status(500).send({ mensaje: 'Error al buscar los productos.' });
+            if (!productosEncontrados || productosEncontrados.length === 0) {
+                return res.status(404).send({ mensaje: 'No se encontraron productos para la categoría proporcionada.' });
+            }
+    
+            return res.status(200).send({ productos: productosEncontrados });
+        });
+    }
+
+
+
+    function obtenerProductos (req, res) {
+        if (req.user.rol !== 'ROL_GESTOR') {
+            return res.status(500).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción" });
+        }
+        
+        Productos.find((err, productosObtenidos) => {
+            if (err) return res.send({ mensaje: "Error: " + err })
+    
+            return res.send({ productos: productosObtenidos })
+            /* Esto retornara
+                {
+                    productos: ["array con todos los productos"]
+                }
+            */ 
+        })
+    }
 
 
 module.exports = {
     agregarProductoRolGestor,
-    agregarProductoRolAdmin,
+    verProductosPorCategoria,
+    obtenerProductosPorIdCategoria,
+    obtenerProductos
 }
