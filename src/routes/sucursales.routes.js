@@ -30,4 +30,9 @@ api.get('/verSucursalPorGestor/:ID', autenticacionToken.Auth, SucursalesControll
 /* Ver sucursal del usuario que este registrado */
 api.get('/verSucursalGestorRegistrado', autenticacionToken.Auth, SucursalesController.verSucursalesPorGestorRegistrado);
 
+
+
+// tareas del ROL_CLIENTE
+api.get('/verTodasSucursalesRolCliente',autenticacionToken.Auth , SucursalesController.ObtenerSucursalesRolCliente);
+
 module.exports= api;

@@ -24,4 +24,8 @@ api.delete('/eliminarProductosRolGestor/:ID', autenticacionToken.Auth , Producto
 /* VER PRODUCTOS POR ID ROL GESTOR */
 api.get('/verProductosPorId/:ID', autenticacionToken.Auth, ProductosController.verProductosPorId);
 
+/* TAREAS DEL ROL_CLIENTE */
+api.get('/verProductosPorSucursal/:ID', autenticacionToken.Auth, ProductosController.obtenerProductosPorIdSucursal);
+
+
 module.exports= api;

@@ -325,6 +325,22 @@ function verSucursalRolGestor(req, res) {
 }
 
   
+/* TAREAS DEL ROL_CLIENTE */
+function ObtenerSucursalesRolCliente(req, res) {
+    if (req.user.rol !== 'ROL_CLIENTE') {
+        return res.status(500).send({ mensaje: "Únicamente el ROL_CLIENTE puede realizar esta acción." });
+    }
+
+    Sucursales.find((err, sucursalesEncontradas) => {
+
+        if (err) return res.status(500).send({ mensaje: 'Error al buscar los productos' })
+        if (!sucursalesEncontradas) return res.status(500).send({ mensaje: 'No existen los productos' })
+
+        return res.status(200).send({ sucursales: sucursalesEncontradas })
+    })
+}
+
+
 
 module.exports = {
     AgregarSucursal,
@@ -336,6 +352,7 @@ module.exports = {
     verSucursalIdRolAdmin,
     AgregarSucursalPorIdEmpresaUsuario,
     verSucursalRolGestor,
-    verSucursalesPorGestorRegistrado
+    verSucursalesPorGestorRegistrado,
+    ObtenerSucursalesRolCliente
 }
 

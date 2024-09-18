@@ -233,6 +233,34 @@ function verProductosPorId(req,res){
 
 }
 
+
+  
+/* TAREAS DEL ROL_CLIENTE */
+function obtenerProductosPorIdSucursal(req, res) {
+
+    if (req.user.rol !== 'ROL_CLIENTE') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción" });
+    }
+
+    const idSucursal = req.params.ID; // ID de la categoría desde la ruta
+
+    // Validar que se reciba el ID de la categoría
+    if (!idSucursal) {
+        return res.status(400).send({ mensaje: 'Falta el ID de la sucursal.' });
+    }
+
+    // Buscar los productos por ID de categoría en el array descripcionCategoria
+    Productos.find({ 'datosSucursal.idSucursal': idSucursal }, (err, productosEncontrados) => {
+        if (err) return res.status(500).send({ mensaje: 'Error al buscar los productos.' });
+        if (!productosEncontrados || productosEncontrados.length === 0) {
+            return res.status(404).send({ mensaje: 'No se encontraron productos para la sucursal proporcionada.' });
+        }
+
+        return res.status(200).send({ productos: productosEncontrados });
+    });
+}
+
+
 module.exports = {
     agregarProductoRolGestor,
     verProductosPorCategoria,
@@ -241,5 +269,6 @@ module.exports = {
     obtenerProductosRolAdmin,
     editarProductosRolGestor,
     eliminarProductosRolGestor,
-    verProductosPorId
+    verProductosPorId,
+    obtenerProductosPorIdSucursal
 }
