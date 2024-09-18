@@ -226,17 +226,26 @@ function obtenersucursalesPorIdEmpresa(req, res) {
 /* editar, eliminar, ver todas sucursales, ver sucursal por id*/
 function editarSucursalRolAdmin(req,res){
     if (req.user.rol !== 'ROL_ADMIN') {
-        return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción " });
+        return res.status(500).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción." });
     }
 
-    var parametros= req.body;
+    var parametros = req.body;
     var idAdmin = req.params.ID;
 
-    Sucursales.findByIdAndUpdate(idAdmin, parametros, {new:true},(err, sucursalesEncontradas)=>{
-        if (err) return res.status(500).send({mensaje: "Error en la peticion"});
-        if (!sucursalesEncontradas)return res.status(500).send({mensaje : "Error al editar la Sucursal"});
-        return res.status(200).send({sucursales: sucursalesEncontradas});           
-    })
+    // Verificar si el nuevo nombre de la sucursal ya existe
+    Sucursales.findOne({ nombreSucursal: parametros.nombreSucursal, _id: { $ne: idAdmin } }, (err, sucursalExistente) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición." });
+        if (sucursalExistente) {
+            return res.status(400).send({ mensaje: "Error: La sucursal con este nombre ya existe." });
+        }
+
+        // Si no existe, proceder a editar la sucursal
+        Sucursales.findByIdAndUpdate(idAdmin, parametros, { new: true }, (err, sucursalesEncontradas) => {
+            if (err) return res.status(500).send({ mensaje: "Error en la petición." });
+            if (!sucursalesEncontradas) return res.status(500).send({ mensaje: "Error al editar la Sucursal." });
+            return res.status(200).send({ sucursales: sucursalesEncontradas });
+        });
+    });
 }
 
 function eliminarSucursalRolAdmin(req,res){
@@ -256,10 +265,12 @@ function verSucursalRolAdmin(req,res){
         return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
     }
 
-    Sucursales.find({rol: 'ROL_ADMIN'},(err, sucursalEncontrada)=>{
-        if(err) return res.status(500).send({ mensaje: "Error en la petición"});
-        if(!sucursalEncontrada) return res.status(500).send({ mensaje: "Error al ver las sucursales"});
-        return res.status(200).send({ sucursales: sucursalEncontrada});
+    Sucursales.find((err, sucursalesEncontradas) => {
+  
+        if (err) return res.status(500).send({ mensaje: 'Error al buscar las sucursales' })
+        if (!sucursalesEncontradas) return res.status(500).send({ mensaje: 'No existen las sucursales' })
+    
+        return res.status(200).send({ sucursales: sucursalesEncontradas })
     })
 }
 
@@ -297,6 +308,23 @@ function verSucursalRolGestor(req, res) {
   
   }
 
+  /* tareas nuevas rol gestor */
+  function verSucursalesPorGestorRegistrado(req, res) {
+
+    if (req.user.rol !== 'ROL_GESTOR') {
+        return res.status(500).send({ mensaje: "Únicamente el ROL_GESTOR puede realizar esta acción." });
+    }
+
+    Sucursales.find({ gestorSucursales: { $elemMatch: { idUsuario: req.user.sub } } }, (err, sucursalesEncontradas) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición." });
+        if (!sucursalesEncontradas || sucursalesEncontradas.length === 0) {
+            return res.status(404).send({ mensaje: "No se encontraron sucursales para este gestor." });
+        }
+        return res.status(200).send({ sucursales: sucursalesEncontradas });
+    });
+}
+
+  
 
 module.exports = {
     AgregarSucursal,
@@ -307,6 +335,7 @@ module.exports = {
     verSucursalRolAdmin,
     verSucursalIdRolAdmin,
     AgregarSucursalPorIdEmpresaUsuario,
-    verSucursalRolGestor
+    verSucursalRolGestor,
+    verSucursalesPorGestorRegistrado
 }
 

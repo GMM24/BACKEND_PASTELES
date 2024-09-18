@@ -12,7 +12,7 @@ api.get ('/getCategoriaRolGestorID/:ID' , autenticacionToken.Auth , CategoriasCo
 
 api.post ('/agregarCategoriaAdmin', autenticacionToken.Auth, CategoriasController.AgregarCategoriaRolAdmin);
 api.put ('/editarCategoriaAdmin/:ID', autenticacionToken.Auth, CategoriasController.editarCategoriaRolAdmin);
-api.delete ('/eliminarCategoriaAdmin/:ID', autenticacionToken.Auth, CategoriasController.eliminarCategoriaRolAdmin);
+api.delete ('/eliminarCategoriaAdmin/:idCategoria', autenticacionToken.Auth, CategoriasController.eliminarCategoriaRolAdmin);
 api.get ('/getCategoriaAdmin', autenticacionToken.Auth , CategoriasController.getCategoriaRolAdmin);
 api.get ('/getCategoriasIDRolAdmin/:ID', autenticacionToken.Auth, CategoriasController.getCategoriaIDRolAdmin);
 

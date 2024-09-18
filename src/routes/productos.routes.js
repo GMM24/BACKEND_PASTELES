@@ -13,10 +13,15 @@ api.get('/verProductosPorCategorias/:ID', autenticacionToken.Auth, ProductosCont
 
 api.get('/verTodosProductos', autenticacionToken.Auth, ProductosController.obtenerProductos);
 
-/*ROL_ADMIN */
-// api.post('/agregarProductosRolAdmin/:ID', autenticacionToken.Auth, ProductosController.agregarProductoRolAdmin);
+/* FUNCIONES QUE FALTAN */
+/* VER PRODUCTOS ROL ADMIN */
+api.get('/verProductosRolAdmin', autenticacionToken.Auth, ProductosController.obtenerProductosRolAdmin);
 
-
-// api.post('/agregarProductosGestor/:ID', autenticacionToken.Auth, ProductosController.agregarProductoRolAdmin);
+/* EDITAR PRODUCTOS ROL GESTOR */
+api.put('/editarProductosRolGestor/:ID', autenticacionToken.Auth , ProductosController.editarProductosRolGestor);
+/* ELIMINAR PRODUCTOS ROL GESTOR  */
+api.delete('/eliminarProductosRolGestor/:ID', autenticacionToken.Auth , ProductosController.eliminarProductosRolGestor);
+/* VER PRODUCTOS POR ID ROL GESTOR */
+api.get('/verProductosPorId/:ID', autenticacionToken.Auth, ProductosController.verProductosPorId);
 
 module.exports= api;
