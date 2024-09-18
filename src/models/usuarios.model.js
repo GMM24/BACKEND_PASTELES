@@ -13,6 +13,7 @@ const UsuarioSchema = Schema({
     direccion: String,
     departamento: String,
     municipio: String,
+    imagen: String
 });
 
 module.exports = mongoose.model('Usuarios', UsuarioSchema);

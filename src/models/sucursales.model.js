@@ -6,6 +6,9 @@ var SucursalesSchema = Schema({
     nombreSucursal: String,
     direccionSucursal: String,
     telefonoSucursal: Number,
+    departamento: String,
+    municipio: String,
+    imagen: String,
 
     idEmpresa: { type: Schema.Types.ObjectId, ref: 'Empresas' },
 

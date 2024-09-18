@@ -96,8 +96,8 @@ function AgregarSucursalPorIdEmpresaUsuario(req, res) {
     const idUsuario = req.params.idUsuario; // ID del usuario desde la ruta
 
     // Validar que se reciban los parámetros necesarios
-    if (!parametros.nombreSucursal || !parametros.direccionSucursal || !parametros.telefonoSucursal) {
-        return res.status(400).send({ mensaje: 'Faltan parámetros necesarios (nombreSucursal, direccionSucursal, telefonoSucursal).' });
+    if (!parametros.nombreSucursal || !parametros.direccionSucursal || !parametros.telefonoSucursal || !parametros.departamento || !parametros.municipio) {
+        return res.status(400).send({ mensaje: 'Faltan parámetros necesarios (nombreSucursal, direccionSucursal, telefonoSucursal, departamento, municipio).' });
     }
 
     // Buscar la empresa por ID
@@ -108,9 +108,9 @@ function AgregarSucursalPorIdEmpresaUsuario(req, res) {
         // Obtener los datos de la empresa para el array datosEmpresa
         const datosEmpresa = {
             idEmpresa: empresaEncontrada._id,
-            nombreEmpresa: empresaEncontrada.nombreEmpresa, // Asegúrate de que el modelo Empresa tenga este campo
-            direccion: empresaEncontrada.direccion,   // Asegúrate de que el modelo Empresa tenga este campo
-            telefono: empresaEncontrada.telefono       // Asegúrate de que el modelo Empresa tenga este campo
+            nombreEmpresa: empresaEncontrada.nombreEmpresa,
+            direccion: empresaEncontrada.direccion,
+            telefono: empresaEncontrada.telefono
         };
 
         // Buscar el usuario por ID
@@ -148,15 +148,18 @@ function AgregarSucursalPorIdEmpresaUsuario(req, res) {
                         nombreSucursal: parametros.nombreSucursal,
                         direccionSucursal: parametros.direccionSucursal,
                         telefonoSucursal: parametros.telefonoSucursal,
+                        departamento: parametros.departamento,
+                        municipio: parametros.municipio,
                         idEmpresa: idEmpresa,
-                        datosEmpresa: [datosEmpresa], // Llenar datosEmpresa aquí
+                        datosEmpresa: [datosEmpresa],
                         gestorSucursales: [{
                             idUsuario: usuarioEncontrado._id,
                             nombre: usuarioEncontrado.nombre,
                             apellido: usuarioEncontrado.apellido,
                             email: usuarioEncontrado.email,
                             rol: usuarioEncontrado.rol
-                        }]
+                        }],
+                        imagen: null // Campo de imagen inicializado como null
                     });
 
                     // Guardar la nueva sucursal en la base de datos

@@ -50,6 +50,7 @@ function agregarUsuario(req, res) {
     usuarioModel.direccion = parametros.direccion;
     usuarioModel.departamento = parametros.departamento;
     usuarioModel.municipio = parametros.municipio;
+    usuarioModel.imagen = null;
 
 
 
@@ -212,6 +213,7 @@ function agregarClienteRolAdmin(req, res) {
     usuarioModel.direccion = parametros.direccion;
     usuarioModel.departamento = parametros.departamento;
     usuarioModel.municipio = parametros.municipio;
+    usuarioModel.imagen = null;
 
 
     //Verificacion de email
@@ -259,6 +261,7 @@ function agregarFacturador(req, res) {
     usuarioModel.direccion = parametros.direccion;
     usuarioModel.departamento = parametros.departamento;
     usuarioModel.municipio = parametros.municipio;
+    usuarioModel.imagen = null;
 
 
     //Verificacion de email
@@ -305,6 +308,7 @@ function agregarEmpleado(req, res) {
     usuarioModel.direccion = parametros.direccion;
     usuarioModel.departamento = parametros.departamento;
     usuarioModel.municipio = parametros.municipio;
+    usuarioModel.imagen = null;
 
     Usuarios.find({ email: parametros.email }, (err, empleadoGuardado) => {
       if (empleadoGuardado.length == 0) {
@@ -349,6 +353,7 @@ function agregarGestor(req, res) {
     usuarioModel.direccion = parametros.direccion;
     usuarioModel.departamento = parametros.departamento;
     usuarioModel.municipio = parametros.municipio;
+    usuarioModel.imagen = null;
 
     Usuarios.find({ email: parametros.email }, (err, gestorGuardado) => {
       if (gestorGuardado.length == 0) {

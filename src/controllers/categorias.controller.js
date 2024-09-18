@@ -17,6 +17,7 @@ function AgregarCategoria(req, res){
   if(parametros.nombreCategoria && parametros.descripcionCategoria) {
     categoriasModel.nombreCategoria = parametros.nombreCategoria;
     categoriasModel.descripcionCategoria = parametros.descripcionCategoria;
+    categoriasModel.imagen = null;
     categoriasModel.idUsuario = req.user.sub;
 
     Categorias.find({ nombreCategoria : parametros.nombreCategoria }, (err, categoriaEncontrada) => {
@@ -121,6 +122,7 @@ function AgregarCategoriaRolAdmin(req, res){
   if(parametros.nombreCategoria && parametros.descripcionCategoria) {
     categoriasModel.nombreCategoria = parametros.nombreCategoria;
     categoriasModel.descripcionCategoria = parametros.descripcionCategoria;
+    categoriasModel.imagen = null;
     categoriasModel.idUsuario = req.user.sub;
 
     Categorias.find({ nombreCategoria : parametros.nombreCategoria }, (err, categoriaEncontrada) => {

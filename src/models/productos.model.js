@@ -9,6 +9,8 @@ var ProductosSchema = Schema({
     stock: Number,
     precio: Number,
     vendido:Number,
+    imagen: String,
+    size: String,
 
     descripcionCategoria: [{
 

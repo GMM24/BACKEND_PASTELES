@@ -15,7 +15,7 @@ function agregarProductoRolGestor(req, res) {
     if (parametros.nombreProducto && parametros.marca &&
         parametros.stock && parametros.precio && parametros.descripcion &&
         parametros.nombreProducto !== "" && parametros.marca !== "" &&
-        parametros.stock !== "" && parametros.precio !== "" && parametros.descripcion !== "") {
+        parametros.stock !== "" && parametros.precio !== "" && parametros.descripcion !== "" && parametros.size !== "") {
 
         // Buscar la categoría por ID
         Categorias.findById(idCategoria, (err, categoriaEncontrada) => {
@@ -34,6 +34,8 @@ function agregarProductoRolGestor(req, res) {
                 productosModel.stock = parametros.stock;
                 productosModel.precio = parametros.precio;
                 productosModel.descripcion = parametros.descripcion;
+                productosModel.size = parametros.size;
+                productosModel.imagen = null;
 
                 // Agregar la categoría al array
                 productosModel.descripcionCategoria = [{
@@ -58,7 +60,7 @@ function agregarProductoRolGestor(req, res) {
             });
         });
     } else {
-        return res.status(400).send({ mensaje: 'Debe llenar los campos necesarios (nombreProducto, marca, descripción, stock, precio). Además, los campos no pueden ser vacíos' });
+        return res.status(400).send({ mensaje: 'Debe llenar los campos necesarios (nombreProducto, marca, descripción, stock, precio, size). Además, los campos no pueden ser vacíos' });
     }
 }
 
