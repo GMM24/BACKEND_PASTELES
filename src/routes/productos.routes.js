@@ -7,7 +7,7 @@ const api = express.Router();
 /*ROL_GESTOR */
 api.post('/agregarProductosRolGestor/:idSucursal/:idCategoria', autenticacionToken.Auth, ProductosController.agregarProductoRolGestor);
 
-api.get('/verProductosRolGestor/:idSucursal/:idCategoria', autenticacionToken.Auth, ProductosController.verProductosPorCategoria);
+api.get('/verProductosRolGestor/:idSucursal/:idCategoria', autenticacionToken.Auth, ProductosController.verProductosRolGestor);
 
 api.get('/verProductosPorCategorias/:ID', autenticacionToken.Auth, ProductosController.obtenerProductosPorIdCategoria);
 

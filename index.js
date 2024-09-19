@@ -40,7 +40,7 @@ function RegistrarAdministradorDefecto(req, res){
             usuarioModel.direccion = 'Calle Doreteo Guamuch Zona 5';
             usuarioModel.departamento = 'Guatemala';
             usuarioModel.municipio = 'Guatemala';
-            usuarioModel.imagen = "";
+            usuarioModel.imagen = null;
 
   
             Usuarios.find({ email : 'ADMIN'}, (err, usuarioEncontrado) => {
