@@ -298,14 +298,15 @@ function EliminarProductoCarrito(req, res) {
 
 }
 
-function agregarCarritoPorIdProducto(req, res){
+
+function agregarCarritoPorIdProducto(req, res) {
     if (req.user.rol !== 'ROL_CLIENTE') {
         return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción " });
     }
 
     // Obtención de parámetros
-    var parametros = req.body;
-    var idProd = req.params.ID;
+    const parametros = req.body;
+    const idProd = req.params.ID;
 
     // Verifica si existe el carrito de mi usuario
     Carritos.findOne({ idUsuario: req.user.sub }, (err, carritoUsuario) => {
@@ -342,83 +343,93 @@ function agregarCarritoPorIdProducto(req, res){
                     email: usuarioEncontrado.email
                 };
 
-                // Si no existe el carrito, crea uno nuevo
-                if (!carritoUsuario) {
-                    var carritoModel = new Carritos();
-                    carritoModel.idUsuario = req.user.sub;
-                    carritoModel.total = 0;
-                    carritoModel.datosUsuario = [datosUsuario]; // Agrega los datos del usuario
+                // Actualiza el stock y vendido en el modelo de productos
+                Productos.findByIdAndUpdate(
+                    idProd,
+                    { 
+                        $inc: { stock: -cantidad, vendido: cantidad } // Disminuye el stock y aumenta vendido
+                    },
+                    { new: true },
+                    (err) => {
+                        if (err) return res.status(500).send({ mensaje: 'Error al actualizar el producto' });
 
-                    // Guarda un carrito para usuario
-                    carritoModel.save((err, carritoCreado) => {
-                        if (err) return res.status(500).send({ mensaje: 'Error en la petición' });
-                        if (!carritoCreado) return res.status(500).send({ mensaje: 'Error al agregar el carrito' });
+                        // Si no existe el carrito, crea uno nuevo
+                        if (!carritoUsuario) {
+                            var carritoModel = new Carritos();
+                            carritoModel.idUsuario = req.user.sub;
+                            carritoModel.total = 0;
+                            carritoModel.datosUsuario = [datosUsuario]; // Agrega los datos del usuario
 
-                        // Agrega el producto al nuevo carrito
-                        Carritos.findByIdAndUpdate(
-                            { _id: carritoCreado._id },
-                            {
-                                total: (carritoCreado.total + compra.subTotal),
-                                $push: { compras: compra }
-                            },
-                            { new: true },
-                            (err, carritoActualizado) => {
-                                if (err) return res.status(500).send({ mensaje: "Error al modificar carrito" });
-                                return res.status(200).send({ mensaje: "Carrito creado y producto agregado", carrito: carritoActualizado });
+                            // Guarda un carrito para usuario
+                            carritoModel.save((err, carritoCreado) => {
+                                if (err) return res.status(500).send({ mensaje: 'Error en la petición' });
+                                if (!carritoCreado) return res.status(500).send({ mensaje: 'Error al agregar el carrito' });
+
+                                // Agrega el producto al nuevo carrito
+                                Carritos.findByIdAndUpdate(
+                                    { _id: carritoCreado._id },
+                                    {
+                                        total: (carritoCreado.total + compra.subTotal),
+                                        $push: { compras: compra }
+                                    },
+                                    { new: true },
+                                    (err, carritoActualizado) => {
+                                        if (err) return res.status(500).send({ mensaje: "Error al modificar carrito" });
+                                        return res.status(200).send({ mensaje: "Carrito creado y producto agregado", carrito: carritoActualizado });
+                                    }
+                                );
+                            });
+                        } else { // Este usuario posee un carrito
+                            // Verifica si el producto ya está en el carrito
+                            const productoEnCarrito = carritoUsuario.compras.find(item => item.idProducto.toString() === idProd);
+
+                            if (productoEnCarrito) {
+                                // Actualiza la cantidad del producto existente
+                                var cantidadNueva = productoEnCarrito.cantidad + cantidad;
+
+                                if (cantidadNueva > productoEncontrado.stock) {
+                                    return res.status(500).send({ mensaje: 'La cantidad total excede el stock disponible' });
+                                }
+
+                                Carritos.findOneAndUpdate(
+                                    { idUsuario: req.user.sub, "compras.idProducto": idProd },
+                                    {
+                                        $set: {
+                                            "compras.$.cantidad": cantidadNueva,
+                                            "compras.$.subTotal": cantidadNueva * productoEncontrado.precio
+                                        },
+                                        $inc: { total: cantidad * productoEncontrado.precio }
+                                    },
+                                    { new: true },
+                                    (err, carritoActualizado) => {
+                                        if (err) return res.status(500).send({ mensaje: "Error al actualizar el carrito" });
+                                        return res.status(200).send({ mensaje: "Producto actualizado en el carrito", carrito: carritoActualizado });
+                                    }
+                                );
+                            } else {
+                                // Agrega un nuevo producto al carrito
+                                Carritos.findByIdAndUpdate(
+                                    carritoUsuario._id,
+                                    {
+                                        $push: {
+                                            compras: compra // Agrega el objeto de compra completo
+                                        },
+                                        $inc: { total: compra.subTotal }
+                                    },
+                                    { new: true },
+                                    (err, carritoActualizado) => {
+                                        if (err) return res.status(500).send({ mensaje: "Error al agregar producto al carrito" });
+                                        return res.status(200).send({ mensaje: "Producto agregado al carrito", carrito: carritoActualizado });
+                                    }
+                                );
                             }
-                        );
-                    });
-                } else { // Este usuario posee un carrito
-                    // Verifica si el producto ya está en el carrito
-                    const productoEnCarrito = carritoUsuario.compras.find(item => item.idProducto.toString() === idProd);
-
-                    if (productoEnCarrito) {
-                        // Actualiza la cantidad del producto existente
-                        var cantidadNueva = productoEnCarrito.cantidad + cantidad;
-
-                        if (cantidadNueva > productoEncontrado.stock) {
-                            return res.status(500).send({ mensaje: 'La cantidad total excede el stock disponible' });
                         }
-
-                        Carritos.findOneAndUpdate(
-                            { idUsuario: req.user.sub, "compras.idProducto": idProd },
-                            {
-                                $set: {
-                                    "compras.$.cantidad": cantidadNueva,
-                                    "compras.$.subTotal": cantidadNueva * productoEncontrado.precio
-                                },
-                                $inc: { total: cantidad * productoEncontrado.precio }
-                            },
-                            { new: true },
-                            (err, carritoActualizado) => {
-                                if (err) return res.status(500).send({ mensaje: "Error al actualizar el carrito" });
-                                return res.status(200).send({ mensaje: "Producto actualizado en el carrito", carrito: carritoActualizado });
-                            }
-                        );
-                    } else {
-                        // Agrega un nuevo producto al carrito
-                        Carritos.findByIdAndUpdate(
-                            carritoUsuario._id,
-                            {
-                                $push: {
-                                    compras: compra // Agrega el objeto de compra completo
-                                },
-                                $inc: { total: compra.subTotal }
-                            },
-                            { new: true },
-                            (err, carritoActualizado) => {
-                                if (err) return res.status(500).send({ mensaje: "Error al agregar producto al carrito" });
-                                return res.status(200).send({ mensaje: "Producto agregado al carrito", carrito: carritoActualizado });
-                            }
-                        );
                     }
-                }
+                );
             });
         });
     });
 }
-
-
 
 
 

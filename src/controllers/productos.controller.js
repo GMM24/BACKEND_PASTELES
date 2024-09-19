@@ -4,6 +4,7 @@ const Sucursales = require('../models/sucursales.model');
 const mongoose = require('mongoose'); 
 
 function agregarProductoRolGestor(req, res) {
+    
     if (req.user.rol !== 'ROL_GESTOR') {
         return res.status(403).send({ mensaje: "Unicamente el ROL_GESTOR puede realizar esta acción" });
     }
