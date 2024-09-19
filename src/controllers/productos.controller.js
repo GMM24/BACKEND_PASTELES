@@ -262,6 +262,21 @@ function verProductosPorId(req,res){
 }
 
 
+/* ROL CLIENTE */
+function verProductosPorIdRolCliente(req,res){
+    if (req.user.rol !== 'ROL_CLIENTE') {
+        return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción " });
+    }
+    var idProducto = req.params.ID;
+
+    Productos.findById(idProducto, (err,productoEncontrado)=>{
+        if(err) return res.status(500).send({ mensaje: "Error en la petición"});
+        if(!productoEncontrado) return res.status(500).send({ mensaje: "Error al ver los productos"});
+        return res.status(200).send({ productos: productoEncontrado});
+    })
+
+}
+
   
 /* TAREAS DEL ROL_CLIENTE */
 function obtenerProductosPorIdSucursal(req, res) {
@@ -298,5 +313,6 @@ module.exports = {
     editarProductosRolGestor,
     eliminarProductosRolGestor,
     verProductosPorId,
-    obtenerProductosPorIdSucursal
+    obtenerProductosPorIdSucursal,
+    verProductosPorIdRolCliente
 }

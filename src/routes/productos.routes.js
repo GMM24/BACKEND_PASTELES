@@ -27,5 +27,6 @@ api.get('/verProductosPorId/:ID', autenticacionToken.Auth, ProductosController.v
 /* TAREAS DEL ROL_CLIENTE */
 api.get('/verProductosPorSucursal/:ID', autenticacionToken.Auth, ProductosController.obtenerProductosPorIdSucursal);
 
+api.get('/verProductoPorIdRolCliente/:ID', autenticacionToken.Auth, ProductosController.verProductosPorIdRolCliente);
 
 module.exports= api;
