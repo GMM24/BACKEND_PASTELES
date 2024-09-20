@@ -2,12 +2,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
 var CarritosSchema = Schema({
-    datosUsuario: [{
-        idUsuario: {type: Schema.Types.ObjectId, ref: 'Usuarios'},
-        nombre: String,
-        apellido: String,
-        email: String
-    }],
+    idUsuario: {type: Schema.Types.ObjectId, ref: 'Usuarios'},
     compras: [{
         idProducto: { type: Schema.Types.ObjectId, ref: 'Productos' },
         nombreProducto: String,
