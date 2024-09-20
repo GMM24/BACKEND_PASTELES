@@ -432,12 +432,26 @@ function agregarCarritoPorIdProducto(req, res) {
 }
 
 
+function verCarritosClienteRegistrado(req, res) {
 
+    if (req.user.rol !== 'ROL_CLIENTE') {
+        return res.status(500).send({ mensaje: "Únicamente el ROL_CLIENTE puede realizar esta acción." });
+    }
+
+    Carritos.find({ datosUsuario: { $elemMatch: { idUsuario: req.user.sub } } }, (err, carritosEncontrados) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición." });
+        if (!carritosEncontrados || carritosEncontrados.length === 0) {
+            return res.status(404).send({ mensaje: "No se encontraron carritos para este cliente" });
+        }
+        return res.status(200).send({ carritos: carritosEncontrados });
+    });
+}
     
 module.exports = {
     RegistrarCarrito,
     EliminarProductoCarrito,
     agregarCarritoPorIdProducto,
+    verCarritosClienteRegistrado
     
 
 }

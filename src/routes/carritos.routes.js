@@ -12,5 +12,6 @@ api.delete('/eliminarProductosCarritos/:idProducto',autenticacionToken.Auth, Car
 // agregar carrito por medio del id del producto
 api.put ('/registrarCarritoPorId/:ID', autenticacionToken.Auth, CarritosController.agregarCarritoPorIdProducto);
 
+api.get('/verCarritosClienteRegistrado',autenticacionToken.Auth , CarritosController.verCarritosClienteRegistrado);
 
 module.exports= api;
