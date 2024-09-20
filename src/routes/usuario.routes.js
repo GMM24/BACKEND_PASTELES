@@ -59,5 +59,16 @@ api.get('/getUsuariosRolGestor', autenticacionToken.Auth, usuarioController.getU
 /* ver propio usuario por ID */
 api.get('/getUsuarioRolGestor/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolGestor);
 
+
+
+/* ---------- ADMINISTRACIÓN DEL ROL REPARTIDOR --------- */
+api.post ('/agregarRolRepartidor', autenticacionToken.Auth,  usuarioController.agregarRepartidor);
+// cambio
+api.delete ('/eliminarRolRepartidor/:ID', autenticacionToken.Auth, usuarioController.eliminarUsuarioRolRepartidor);
+api.put ('/editarRolRepartidor/:ID', autenticacionToken.Auth, usuarioController.editarUsuarioRolRepartidor);
+api.get('/getUsuarioRolRepartidor', autenticacionToken.Auth, usuarioController.getUsuariosRolRepartidor);
+api.get('/getUsuarioIdRolRepartidor/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolRepartidor);
+
+
 /* al momento de subir esto a github, eliminar las librerias :) */
 module.exports= api;

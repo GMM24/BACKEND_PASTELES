@@ -619,6 +619,142 @@ function getUsuarioIdRolGestor(req, res) {
   })
 }
 
+
+/* agregar ROL_REPARTIDOR por defecto */
+function agregarRepartidor(req, res) {
+
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+
+  }
+
+  var parametros = req.body;
+  var usuarioModel = new Usuarios();
+  if (parametros.nombre && parametros.apellido && parametros.email && parametros.password) {
+    usuarioModel.nombre = parametros.nombre;
+    usuarioModel.apellido = parametros.apellido;
+    usuarioModel.email = parametros.email;
+    usuarioModel.password = parametros.password;
+    usuarioModel.rol = 'ROL_REPARTIDOR';
+    usuarioModel.telefono = parametros.telefono;
+    usuarioModel.direccion = parametros.direccion;
+    usuarioModel.departamento = parametros.departamento;
+    usuarioModel.municipio = parametros.municipio;
+    usuarioModel.imagen = null;
+
+    Usuarios.find({ email: parametros.email }, (err, gestorGuardado) => {
+      if (gestorGuardado.length == 0) {
+        bcrypt.hash(parametros.password, null, null, (err, passwordEncriptada) => {
+          usuarioModel.password = passwordEncriptada;
+
+
+
+          usuarioModel.save((err, gestorGuardado) => {
+            if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
+            if (!gestorGuardado) return res.status(500).send({ mensaje: "Error al agregar el empleado" });
+
+            return res.status(200).send({ usuario: gestorGuardado });
+          });
+        });
+      } else {
+        return res.status(500).send({ mensaje: "Correo Existente, ingrese uno nuevo" });
+      }
+
+    })
+  } else {
+    return res.status(500).send({ mensaje: "Complete los campos obligatorios" });
+  }
+}
+
+// 2. eliminar usuario
+function eliminarUsuarioRolRepartidor(req, res) {
+
+  // siempre poner esto al principio, es para verificar quien puede realizar la acción
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+
+  }
+
+  var idRepartidor = req.params.ID;
+  Usuarios.findByIdAndDelete(idRepartidor, (err, eliminarRolUsuario) => {
+
+    if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+    if (!eliminarRolUsuario) return res.status(500).send({ mensaje: "Error al eliminar el usuario" });
+    return res.status(200).send({ usuario: eliminarRolUsuario });
+
+  });
+
+}
+
+function editarUsuarioRolRepartidor(req, res) {
+
+  // Verificar el rol de usuario
+ if (req.user.rol !== 'ROL_ADMIN') {
+   return res.status(403).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+ }
+
+ var parametros = req.body;
+ var idRepartidor = req.params.ID;
+
+ // Verificar si se está intentando cambiar el email
+ if (parametros.email) {
+   // Buscar si el email ya existe en otro usuario
+   Usuarios.findOne({ email: parametros.email, _id: { $ne: idRepartidor } }, (err, emailExistente) => {
+     if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+     if (emailExistente) {
+       return res.status(400).send({ mensaje: "El email ya está en uso por otro usuario." });
+     }
+
+     // Si el email no existe, proceder a actualizar
+     Usuarios.findByIdAndUpdate(idRepartidor, parametros, { new: true }, (err, usuarioEncontrado) => {
+       if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+       if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+       return res.status(200).send({ usuario: usuarioEncontrado });
+     });
+   });
+ } else {
+   // Si no se proporciona un nuevo email, proceder a actualizar directamente
+   Usuarios.findByIdAndUpdate(idRepartidor, parametros, { new: true }, (err, usuarioEncontrado) => {
+     if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+     if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+     return res.status(200).send({ usuario: usuarioEncontrado });
+   });
+ }
+}
+
+function getUsuariosRolRepartidor(req, res) {
+
+  // VERIFICADOR
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+
+  }
+
+  // verificar que tipo de usuario quiero ver
+  Usuarios.find({ rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+    if (!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios" });
+    return res.status(200).send({ usuario: usuariosEncontrados });
+  })
+}
+
+
+function getUsuarioIdRolRepartidor(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+  // buscar por id
+  var idRepartidor = req.params.ID;
+
+  Usuarios.findById(idRepartidor, (err, usuariosEncontrados) => {
+    if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+    if (!usuariosEncontrados) return res.status(500).send({ mensaje: "Error al ver los usuarios" });
+    return res.status(200).send({ usuario: usuariosEncontrados })
+  })
+}
+
+
+/* AGREGAR ROL REPARTIDOR */
 /* Siempre mandar a llamar a las funciones aqui */
 module.exports = {
   Login,
@@ -647,7 +783,13 @@ module.exports = {
   eliminarUsuarioRolGestor,
   getUsuariosRoLGestor,
   getUsuarioIdRolGestor,
-  agregarClienteRolAdmin
+  agregarClienteRolAdmin,
+  agregarRepartidor,
+  eliminarUsuarioRolRepartidor,
+  editarUsuarioRolRepartidor,
+  getUsuariosRolRepartidor,
+  getUsuarioIdRolRepartidor
+  
 }
 
 
