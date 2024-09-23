@@ -299,51 +299,51 @@ function EliminarProductoCarrito(req, res) {
 }
 
 
-function agregarCarritoPorIdProducto(req, res){
+function agregarCarritoPorIdProducto(req, res) {
     if (req.user.rol !== 'ROL_CLIENTE') {
-    return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción " });
+        return res.status(500).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción " });
     }
-    
- 
+
     // Obtención de parámetros
     var parametros = req.body;
     var idProd = req.params.ID;
-    
-    // Verifica si existe el carrito de mi usuario
+
+    // Verifica si existe el carrito del usuario
     Carritos.findOne({ idUsuario: req.user.sub }, (err, carritoUsuario) => {
         if (err) return res.status(500).send({ mensaje: 'Error al agregar carrito' });
-    
+
         // Verifica la existencia del producto
         Productos.findById(idProd, (err, productoEncontrado) => {
             if (err || !productoEncontrado) return res.status(500).send({ mensaje: 'Error al buscar producto' });
-    
+
             // Verifica la cantidad
             const cantidad = Number(parametros.cantidad); // Asegúrate de convertir a número
             if (cantidad <= 0) return res.status(500).send({ mensaje: 'La cantidad no puede ser menor o igual a cero' });
             if (cantidad > productoEncontrado.stock) return res.status(500).send({ mensaje: 'Cantidad excede el stock disponible' });
-    
+
             // Crea el objeto de compra con datos adicionales
             const compra = {
                 idProducto: productoEncontrado._id,
                 nombreProducto: productoEncontrado.nombreProducto,
                 cantidad: cantidad,
+                size: productoEncontrado.size, // Agrega el tamaño del producto aquí
                 precio: productoEncontrado.precio,
                 subTotal: cantidad * productoEncontrado.precio,
                 descripcionCategoria: productoEncontrado.descripcionCategoria, // Agrega la categoría
                 datosSucursal: productoEncontrado.datosSucursal // Agrega los datos de sucursal
             };
-    
+
             // Si no existe el carrito, crea uno nuevo
             if (!carritoUsuario) {
                 var carritoModel = new Carritos();
                 carritoModel.idUsuario = req.user.sub;
                 carritoModel.total = 0;
-    
-                // Guarda un carrito para usuario
+
+                // Guarda un carrito para el usuario
                 carritoModel.save((err, carrritoUsuario) => {
                     if (err) return res.status(500).send({ mensaje: 'Error en la petición' });
                     if (!carrritoUsuario) return res.status(500).send({ mensaje: 'Error al agregar el carrito' });
-    
+
                     // Agrega el producto al nuevo carrito
                     Carritos.findByIdAndUpdate(
                         { _id: carrritoUsuario._id },
@@ -361,21 +361,22 @@ function agregarCarritoPorIdProducto(req, res){
             } else { // Este usuario posee un carrito
                 // Verifica si el producto ya está en el carrito
                 const productoEnCarrito = carritoUsuario.compras.find(item => item.idProducto.toString() === idProd);
-    
+
                 if (productoEnCarrito) {
                     // Actualiza la cantidad del producto existente
                     var cantidadNueva = productoEnCarrito.cantidad + cantidad;
-    
+
                     if (cantidadNueva > productoEncontrado.stock) {
                         return res.status(500).send({ mensaje: 'La cantidad total excede el stock disponible' });
                     }
-    
+
                     Carritos.findOneAndUpdate(
                         { idUsuario: req.user.sub, "compras.idProducto": idProd },
                         {
                             $set: {
                                 "compras.$.cantidad": cantidadNueva,
-                                "compras.$.subTotal": cantidadNueva * productoEncontrado.precio
+                                "compras.$.subTotal": cantidadNueva * productoEncontrado.precio,
+                                "compras.$.size": productoEncontrado.size // Actualiza el tamaño si es necesario
                             },
                             $inc: { total: cantidad * productoEncontrado.precio }
                         },
@@ -405,7 +406,7 @@ function agregarCarritoPorIdProducto(req, res){
             }
         });
     });
-    }
+}
 
 
 function verCarritosClienteRegistrado(req, res) {

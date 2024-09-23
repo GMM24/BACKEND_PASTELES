@@ -1,10 +1,24 @@
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
-var CarritosSchema = Schema({
+var PedidosSchema = Schema({
+  
+    fecha: Date,
+    tiempoEstimado: String,
+    tipoPago: String ,
+    estado:String,
+    direccionEnvio: String,
+    fechaEntrega: Date,
+    horaEntrega: String,
+    metodoEnvio: String,
+    descuentos: Number,
+    numeroDeOrden: Number,
+    pagoConfirmado: String,
+    
     idUsuario: {type: Schema.Types.ObjectId, ref: 'Usuarios'},
+
     compras: [{
-        idProducto: { type: Schema.Types.ObjectId, ref: 'Productos' },
+        idProducto: {type:Schema.Types.ObjectId,ref:'Productos'},
         nombreProducto: String,
         cantidad: Number,
         size:String,
@@ -19,9 +33,10 @@ var CarritosSchema = Schema({
             nombreSucursal: String,
             direccionSucursal: String,
             telefonoSucursal: String
-        }]
+        }] 
     }],
     total: Number
+
 });
 
-module.exports = mongoose.model('Carritos',CarritosSchema);
+module.exports = mongoose.model('Pedidos',PedidosSchema);
