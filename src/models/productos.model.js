@@ -11,6 +11,7 @@ var ProductosSchema = Schema({
     vendido:Number,
     imagen: String,
     size: String,
+    estado: String,
 
     descripcionCategoria: [{
 

@@ -37,6 +37,7 @@ function agregarProductoRolGestor(req, res) {
                 productosModel.precio = parametros.precio;
                 productosModel.descripcion = parametros.descripcion;
                 productosModel.size = parametros.size;
+                productosModel.estado = "disponible";
                 productosModel.imagen = null;
 
                 // Agregar la categoría al array

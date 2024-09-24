@@ -6,6 +6,7 @@ var CarritosSchema = Schema({
     compras: [{
         idProducto: { type: Schema.Types.ObjectId, ref: 'Productos' },
         nombreProducto: String,
+        marca:String,
         cantidad: Number,
         size:String,
         precio: Number,
