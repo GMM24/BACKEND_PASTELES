@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const bcrypt = require("bcrypt-nodejs");
 const Usuarios = require('./src/models/usuarios.model');
+// const Tarjeta = require('./src/models/tarjetas.model'); // Ajusta la ruta
 
 // BASE DE DATOS
 mongoose.Promise = global.Promise;
@@ -15,6 +16,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/BACKEND_PASTELERIA', {useNewUrlParse
     })
 
     RegistrarAdministradorDefecto();
+
+    // agregarTarjeta(111, 'Juan Pérez');
+
 }).catch(error =>console.log(error))
 
 
@@ -66,3 +70,19 @@ function RegistrarAdministradorDefecto(req, res){
     })
   
   }
+
+
+  /* function agregarTarjeta(noTarjeta, nombreUsuario) {
+    const nuevaTarjeta = new Tarjeta({
+        noTarjeta,
+        nombreUsuario
+    });
+
+    nuevaTarjeta.save()
+        .then(tarjetaGuardada => {
+            console.log('Tarjeta agregada:', tarjetaGuardada);
+        })
+        .catch(error => {
+            console.error('Error al agregar la tarjeta:', error);
+        });
+} */

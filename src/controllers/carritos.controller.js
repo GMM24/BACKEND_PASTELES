@@ -409,7 +409,7 @@ function agregarCarritoPorIdProducto(req, res) {
 }
 
 
-function verCarritosClienteRegistrado(req, res) {
+/* function verCarritosClienteRegistrado(req, res) {
 
     if (req.user.rol !== 'ROL_CLIENTE') {
         return res.status(500).send({ mensaje: "Únicamente el ROL_CLIENTE puede realizar esta acción." });
@@ -422,7 +422,24 @@ function verCarritosClienteRegistrado(req, res) {
         }
         return res.status(200).send({ carritos: carritosEncontrados });
     });
-}
+} */
+
+
+    function verCarritosClienteRegistrado(req, res) {
+        // Verifica si el usuario está autenticado
+        if (req.user.rol !== 'ROL_CLIENTE') {
+            return res.status(500).send({ mensaje: "Únicamente el ROL_CLIENTE puede realizar esta acción." });
+        }
+    
+        // Busca los carritos del usuario usando el idUsuario directamente
+        Carritos.find({ idUsuario: req.user.sub }, (err, carritosEncontrados) => {
+            if (err) return res.status(500).send({ mensaje: "Error en la petición." });
+            if (!carritosEncontrados || carritosEncontrados.length === 0) {
+                return res.status(404).send({ mensaje: "No se encontraron carritos para este cliente" });
+            }
+            return res.status(200).send({ carritos: carritosEncontrados });
+        });
+    }
     
 module.exports = {
     RegistrarCarrito,

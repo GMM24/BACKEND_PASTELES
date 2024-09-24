@@ -15,7 +15,15 @@ var PedidosSchema = Schema({
     numeroDeOrden: Number,
     pagoConfirmado: String,
     
-    idUsuario: {type: Schema.Types.ObjectId, ref: 'Usuarios'},
+    /* HACE REFERENCIA A USUARIOS */
+    datosUsuario: [{
+        idUsuario: {type: Schema.Types.ObjectId, ref: 'Usuarios'},
+        nombre: String,
+        apellido: String,
+        email: String,
+        telefono: Number
+    }],
+
 
     compras: [{
         idProducto: {type:Schema.Types.ObjectId,ref:'Productos'},
