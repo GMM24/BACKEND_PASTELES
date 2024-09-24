@@ -69,6 +69,14 @@ api.put ('/editarRolRepartidor/:ID', autenticacionToken.Auth, usuarioController.
 api.get('/getUsuarioRolRepartidor', autenticacionToken.Auth, usuarioController.getUsuariosRolRepartidor);
 api.get('/getUsuarioIdRolRepartidor/:ID', autenticacionToken.Auth, usuarioController.getUsuarioIdRolRepartidor);
 
+//ROL CAJERO
+ api.post('/agregarRolCajero' , autenticacionToken.Auth, usuarioController.agregarUsuarioCajero);
+ api.put('/editarRolCajero/:ID', autenticacionToken.Auth , usuarioController.editarUsuarioCajero);
+ api.delete('/eliminarRolCajero/:ID', autenticacionToken.Auth, usuarioController.eliminarUsuarioCajero);
+ api.get ('/getRolCajero', autenticacionToken.Auth , usuarioController.getUsuarioCajero);
+ api.get('/getRolIdCajero/:ID' , autenticacionToken.Auth ,usuarioController.getUsuarioIdCajero);
+
+
 
 /* al momento de subir esto a github, eliminar las librerias :) */
 module.exports= api;
