@@ -305,6 +305,56 @@ function obtenerProductosPorIdSucursal(req, res) {
     });
 }
 
+/* VER PRODUCTOS EL ROL CLIENTE  */
+function verProductosRolCliente(req, res) {
+
+    if (req.user.rol !== 'ROL_CLIENTE') {
+        return res.status(403).send({ mensaje: "Unicamente el ROL_CLIENTE puede realizar esta acción." });
+    }
+
+    const idSucursal = req.params.idSucursal; // ID de la sucursal desde la ruta
+    const idCategoria = req.params.idCategoria; // ID de la categoría desde la ruta
+
+    // Validar que se reciban ambos IDs
+    if (!idSucursal || !idCategoria) {
+        return res.status(400).send({ mensaje: 'Faltan el ID de la sucursal o el ID de la categoría.' });
+    }
+
+    // Verificar que los IDs sean válidos
+    if (!mongoose.Types.ObjectId.isValid(idSucursal) || !mongoose.Types.ObjectId.isValid(idCategoria)) {
+        return res.status(400).send({ mensaje: 'ID de sucursal o categoría inválido.' });
+    }
+
+    // Buscar si la sucursal y la categoría existen
+    Promise.all([
+        Sucursales.findById(idSucursal),
+        Categorias.findById(idCategoria)
+    ])
+    .then(([sucursal, categoria]) => {
+        if (!sucursal) {
+            return res.status(404).send({ mensaje: 'Sucursal no encontrada.' });
+        }
+        if (!categoria) {
+            return res.status(404).send({ mensaje: 'Categoría no encontrada.' });
+        }
+
+        // Buscar los productos por ID de sucursal y ID de categoría
+        return Productos.find({ 
+            'datosSucursal.idSucursal': idSucursal, 
+            'descripcionCategoria.idCategoria': idCategoria 
+        });
+    })
+    .then(productosEncontrados => {
+        if (!productosEncontrados || productosEncontrados.length === 0) {
+            return res.status(404).send({ mensaje: 'No se encontraron productos para la sucursal y categoría proporcionadas.' });
+        }
+
+        return res.status(200).send({ productos: productosEncontrados });
+    })
+    .catch(err => {
+        return res.status(500).send({ mensaje: 'Error al buscar los productos.', error: err });
+    });
+}
 
 module.exports = {
     agregarProductoRolGestor,
@@ -316,5 +366,6 @@ module.exports = {
     eliminarProductosRolGestor,
     verProductosPorId,
     obtenerProductosPorIdSucursal,
-    verProductosPorIdRolCliente
+    verProductosPorIdRolCliente,
+    verProductosRolCliente
 }
