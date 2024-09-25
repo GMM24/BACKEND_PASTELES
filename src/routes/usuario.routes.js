@@ -76,7 +76,9 @@ api.get('/getUsuarioIdRolRepartidor/:ID', autenticacionToken.Auth, usuarioContro
  api.get ('/getRolCajero', autenticacionToken.Auth , usuarioController.getUsuarioCajero);
  api.get('/getRolIdCajero/:ID' , autenticacionToken.Auth ,usuarioController.getUsuarioIdCajero);
 
-
+/* VER USUARIOS POR DEPARTAMENTO */
+/* ROL GESTOR  */
+api.get('/getGestorGuatemala', autenticacionToken.Auth, usuarioController.getGestorGuatemala);
 
 /* al momento de subir esto a github, eliminar las librerias :) */
 module.exports= api;

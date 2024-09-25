@@ -877,6 +877,27 @@ function getUsuarioIdCajero(req, res) {
   })
 }
 
+/* IMPLEMENTANDO VER USUARIOS POR DEPARTAMENTO */
+/* ROL GESTOR VER POR DEPARTAMENTO  */
+function getGestorGuatemala(req, res) {
+  // Verifica si el usuario tiene el rol de ADMIN
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  // Busca usuarios en el departamento de Guatemala con rol de GESTOR
+  Usuarios.find({ departamento: 'Guatemala', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+    
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
 
 
 
@@ -920,7 +941,8 @@ module.exports = {
   editarUsuarioCajero,
   eliminarUsuarioCajero,
   getUsuarioCajero,
-  getUsuarioIdCajero
+  getUsuarioIdCajero,
+  getGestorGuatemala
 }
 
 
