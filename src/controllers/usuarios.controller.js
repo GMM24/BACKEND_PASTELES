@@ -810,13 +810,13 @@ function editarUsuarioCajero(req, res) {
   var idCajero = req.params.ID;
 
   if (parametros.email) {
-  
+
     Usuarios.findOne({ email: parametros.email, _id: { $ne: idRepartidor } }, (err, emailExistente) => {
       if (err) return res.status(500).send({ mensaje: "Error en la petición" });
       if (emailExistente) {
         return res.status(400).send({ mensaje: "El email ya está en uso por otro usuario." });
       }
-      
+
       Usuarios.findByIdAndUpdate(idCajero, parametros, { new: true }, (err, usuarioEncontrado) => {
         if (err) return res.status(500).send({ mensaje: "Error en la petición" });
         if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar Cajero" });
@@ -833,7 +833,7 @@ function editarUsuarioCajero(req, res) {
   }
 }
 
-function eliminarUsuarioCajero(req,res){
+function eliminarUsuarioCajero(req, res) {
   if (req.user.rol !== 'ROL_ADMIN') {
     return res.status(500).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
 
@@ -880,23 +880,843 @@ function getUsuarioIdCajero(req, res) {
 /* IMPLEMENTANDO VER USUARIOS POR DEPARTAMENTO */
 /* ROL GESTOR VER POR DEPARTAMENTO  */
 function getGestorGuatemala(req, res) {
-  // Verifica si el usuario tiene el rol de ADMIN
   if (req.user.rol !== 'ROL_ADMIN') {
     return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
   }
 
-  // Busca usuarios en el departamento de Guatemala con rol de GESTOR
   Usuarios.find({ departamento: 'Guatemala', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
     if (err) {
       return res.status(500).send({ mensaje: "Error en la petición" });
     }
-    
+
     if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
       return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
     }
 
     return res.status(200).send({ usuarios: usuariosEncontrados });
   });
+}
+
+
+function getGestorAltaVerapaz(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Alta Verapaz', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getGestorBajaVerapaz(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Baja Verapaz', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getGestorChimaltenango(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Chimaltenango', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getGestorChiquimula(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Chiquimula', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getGestorElProgreso(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'El Progreso', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getGestorEscuintla(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Escuintla', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getGestorHuehuetenango(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Huehuetenango', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorIzabal(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Izabal', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorJalapa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Jalapa', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorJutiapa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Jutiapa', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorPeten(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Petén', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorQuetzaltenango(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Quetzaltenango', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorQuiche(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Quiché', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorRetalhuleu(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Retalhuleu', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorSacatepequez(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Sacatepequez', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorSanMarcos(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'San Marcos', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorSantaRosa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Santa Rosa', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorSolola(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Sololá', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorSuchitepequez(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Suchitepequez', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorTotonicapan(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Totonicapan', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getGestorZacapa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Zacapa', rol: 'ROL_GESTOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+/*ROL REPARTIDOR*/
+function getRepartidorGuatemala(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Guatemala', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getRepartidorAltaVerapaz(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Alta Verapaz', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getRepartidorBajaVerapaz(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Baja Verapaz', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorChimaltenango(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Chimaltenango', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getRepartidorChiquimula(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Chiquimula', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getRepartidorElProgreso(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'El Progreso', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorEscuintla(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Escuintla', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getRepartidorHuehuetenango(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Huehuetenango', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+
+function getRepartidorIzabal(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Izabal', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorJalapa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Jalapa', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorJutiapa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Jutiapa', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorPeten(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Petén', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorQuetzaltenango(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Quetzaltenango', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorQuiche(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Quiché', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorRetalhuleu(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Retalhuleu', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorSacatepequez(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Sacatepéquez', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorSanMarcos(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'San Marcos', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorSantaRosa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Santa Rosa', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorSolola(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Solola', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorSuchitepequez(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Suchitepequez', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorTotonicapan(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Totonicapan', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+
+function getRepartidorZacapa(req, res) {
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Únicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  Usuarios.find({ departamento: 'Zacapa', rol: 'ROL_REPARTIDOR' }, (err, usuariosEncontrados) => {
+    if (err) {
+      return res.status(500).send({ mensaje: "Error en la petición" });
+    }
+
+    if (!usuariosEncontrados || usuariosEncontrados.length === 0) {
+      return res.status(404).send({ mensaje: "No se encontraron usuarios para este departamento" });
+    }
+
+    return res.status(200).send({ usuarios: usuariosEncontrados });
+  });
+}
+function editarPerfilAdmin(req, res) {
+
+  if (req.user.rol !== 'ROL_ADMIN') {
+    return res.status(403).send({ mensaje: "Unicamente el ROL_ADMIN puede realizar esta acción" });
+  }
+
+  var parametros = req.body;
+  var idAdmin = req.params.ID;
+
+  // Verificar si se está intentando cambiar el email
+  if (parametros.email) {
+    // Buscar si el email ya existe en otro usuario
+    Usuarios.findOne({ email: parametros.email, _id: { $ne: idAdmin } }, (err, emailExistente) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (emailExistente) {
+        return res.status(400).send({ mensaje: "El email ya está en uso por otro usuario." });
+      }
+
+      // Si el email no existe, proceder a actualizar
+      Usuarios.findByIdAndUpdate(idAdmin, parametros, { new: true }, (err, usuarioEncontrado) => {
+        if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+        if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+        return res.status(200).send({ usuario: usuarioEncontrado });
+      });
+    });
+  } else {
+    // Si no se proporciona un nuevo email, proceder a actualizar directamente
+    Usuarios.findByIdAndUpdate(idAdmin, parametros, { new: true }, (err, usuarioEncontrado) => {
+      if (err) return res.status(500).send({ mensaje: "Error en la petición" });
+      if (!usuarioEncontrado) return res.status(404).send({ mensaje: "Error al editar el cliente" });
+      return res.status(200).send({ usuario: usuarioEncontrado });
+    });
+  }
 }
 
 
@@ -942,7 +1762,53 @@ module.exports = {
   eliminarUsuarioCajero,
   getUsuarioCajero,
   getUsuarioIdCajero,
-  getGestorGuatemala
+  /*ROL GESTOR POR DEPARTAMENTO */
+  getGestorGuatemala,
+  getGestorAltaVerapaz,
+  getGestorBajaVerapaz,
+  getGestorChimaltenango,
+  getGestorChiquimula,
+  getGestorElProgreso,
+  getGestorEscuintla,
+  getGestorHuehuetenango,
+  getGestorIzabal,
+  getGestorJalapa,
+  getGestorJutiapa,
+  getGestorPeten,
+  getGestorQuetzaltenango,
+  getGestorQuiche,
+  getGestorRetalhuleu,
+  getGestorSacatepequez,
+  getGestorSanMarcos,
+  getGestorSantaRosa,
+  getGestorSolola,
+  getGestorSuchitepequez,
+  getGestorTotonicapan,
+  getGestorZacapa,
+  /*ROL REPARTIDOR POR DEPARTAMENTO */
+  getRepartidorGuatemala,
+  getRepartidorAltaVerapaz,
+  getRepartidorBajaVerapaz,
+  getRepartidorChimaltenango,
+  getRepartidorChiquimula,
+  getRepartidorElProgreso,
+  getRepartidorEscuintla,
+  getRepartidorHuehuetenango,
+  getRepartidorIzabal,
+  getRepartidorJalapa,
+  getRepartidorJutiapa,
+  getRepartidorPeten,
+  getRepartidorQuetzaltenango,
+  getRepartidorQuiche,
+  getRepartidorRetalhuleu,
+  getRepartidorSacatepequez,
+  getRepartidorSanMarcos,
+  getRepartidorSantaRosa,
+  getRepartidorSolola,
+  getRepartidorSuchitepequez,
+  getRepartidorTotonicapan,
+  getRepartidorZacapa
+
 }
 
 

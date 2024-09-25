@@ -79,6 +79,51 @@ api.get('/getUsuarioIdRolRepartidor/:ID', autenticacionToken.Auth, usuarioContro
 /* VER USUARIOS POR DEPARTAMENTO */
 /* ROL GESTOR  */
 api.get('/getGestorGuatemala', autenticacionToken.Auth, usuarioController.getGestorGuatemala);
+api.get('/getGestorAltaVerapaz', autenticacionToken.Auth, usuarioController.getGestorAltaVerapaz);
+api.get('/getGestorBajaVerapaz', autenticacionToken.Auth, usuarioController.getGestorBajaVerapaz);
+api.get('/getGestorChimaltenango', autenticacionToken.Auth, usuarioController.getGestorChimaltenango);
+api.get('/getGestorChiquimula', autenticacionToken.Auth, usuarioController.getGestorChiquimula);
+api.get('/getGestorElProgreso', autenticacionToken.Auth, usuarioController.getGestorElProgreso);
+api.get('/getGestorEscuintla', autenticacionToken.Auth, usuarioController.getGestorEscuintla);
+api.get('/getGestorHuehuetenango', autenticacionToken.Auth, usuarioController.getGestorHuehuetenango);
+api.get('/getGestorIzabal', autenticacionToken.Auth, usuarioController.getGestorIzabal);
+api.get('/getGestorJalapa', autenticacionToken.Auth, usuarioController.getGestorJalapa);
+api.get('/getGestorJutiapa', autenticacionToken.Auth, usuarioController.getGestorJutiapa);
+api.get('/getGestorPeten', autenticacionToken.Auth, usuarioController.getGestorPeten);
+api.get('/getGestorQuetzaltenango', autenticacionToken.Auth, usuarioController.getGestorQuetzaltenango);
+api.get('/getGestorQuiche', autenticacionToken.Auth, usuarioController.getGestorQuiche);
+api.get('/getGestorRetalhuleu', autenticacionToken.Auth, usuarioController.getGestorRetalhuleu);
+api.get('/getGestorSacatepequez', autenticacionToken.Auth, usuarioController.getGestorSacatepequez);
+api.get('/getGestorSanMarcos', autenticacionToken.Auth, usuarioController.getGestorSanMarcos);
+api.get('/getGestorSantaRosa', autenticacionToken.Auth, usuarioController.getGestorSantaRosa);
+api.get('/getGestorSolola', autenticacionToken.Auth, usuarioController.getGestorSolola);
+api.get('/getGestorSuchitepequez', autenticacionToken.Auth, usuarioController.getGestorSuchitepequez);
+api.get('/getGestorTotonicapan', autenticacionToken.Auth, usuarioController.getGestorTotonicapan);
+api.get('/getGestorZacapa', autenticacionToken.Auth, usuarioController.getGestorZacapa);
+
+/*ROL REPARTIDOR */
+api.get('/getRepartidorGuatemala', autenticacionToken.Auth, usuarioController.getRepartidorGuatemala);
+api.get('/getRepartidorAltaVerapaz', autenticacionToken.Auth, usuarioController.getRepartidorAltaVerapaz);
+api.get('/getRepartidorBajaVerapaz', autenticacionToken.Auth, usuarioController.getRepartidorBajaVerapaz);
+api.get('/getRepartidorChimaltenango', autenticacionToken.Auth, usuarioController.getRepartidorChimaltenango);
+api.get('/getRepartidorChiquimula', autenticacionToken.Auth, usuarioController.getRepartidorChiquimula);
+api.get('/getRepartidorElProgreso', autenticacionToken.Auth, usuarioController.getRepartidorElProgreso);
+api.get('/getRepartidorEscuintla', autenticacionToken.Auth, usuarioController.getRepartidorEscuintla);
+api.get('/getRepartidorHuehuetenango', autenticacionToken.Auth, usuarioController.getRepartidorHuehuetenango);
+api.get('/getRepartidorIzabal', autenticacionToken.Auth, usuarioController.getRepartidorIzabal);
+api.get('/getRepartidorJalapa', autenticacionToken.Auth, usuarioController.getRepartidorJalapa);
+api.get('/getRepartidorJutiapa', autenticacionToken.Auth, usuarioController.getRepartidorJutiapa);
+api.get('/getRepartidorPeten', autenticacionToken.Auth, usuarioController.getRepartidorPeten);
+api.get('/getRepartidorQuetzaltenango', autenticacionToken.Auth, usuarioController.getRepartidorQuetzaltenango);
+api.get('/getRepartidorQuiche', autenticacionToken.Auth, usuarioController.getRepartidorQuiche);
+api.get('/getRepartidorRetalhuleu', autenticacionToken.Auth, usuarioController.getRepartidorRetalhuleu);
+api.get('/getRepartidorSacatepequez', autenticacionToken.Auth, usuarioController.getRepartidorSacatepequez);
+api.get('/getRepartidorSanMarcos', autenticacionToken.Auth, usuarioController.getRepartidorSanMarcos);
+api.get('/getRepartidorSantaRosa', autenticacionToken.Auth, usuarioController.getRepartidorSantaRosa);
+api.get('/getRepartidorSolola', autenticacionToken.Auth, usuarioController.getRepartidorSolola);
+api.get('/getRepartidorSuchitepequez', autenticacionToken.Auth, usuarioController.getRepartidorSuchitepequez);
+api.get('/getRepartidorTotonicapan', autenticacionToken.Auth, usuarioController.getRepartidorTotonicapan);
+api.get('/getRepartidorZacapa', autenticacionToken.Auth, usuarioController.getRepartidorZacapa);
 
 /* al momento de subir esto a github, eliminar las librerias :) */
 module.exports= api;
